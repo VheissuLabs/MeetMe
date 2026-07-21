@@ -36,6 +36,30 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fallback Questions
+    |--------------------------------------------------------------------------
+    |
+    | Used when a user's AI-generated pool is empty at scan time. A scan
+    | never waits on AI — this pool guarantees the app works without an
+    | Anthropic key at all.
+    |
+    */
+
+    'fallback_questions' => [
+        'What is the most cursed production bug they have ever shipped — and how did they find it?',
+        'Ask them: tabs or spaces — and can they actually defend it?',
+        'What is the one tool they could not live without right now?',
+        'Which side project of theirs is currently gathering the most dust?',
+        'What is the best conference talk they have ever seen live?',
+        'If they had a free month to build anything at all, what would it be?',
+        'What is their spiciest take about the framework or language they use every day?',
+        'What is the weirdest thing they have ever automated?',
+        'What tech opinion have they completely reversed on?',
+        'What is the smallest change they have ever shipped with the biggest impact?',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Scanning
     |--------------------------------------------------------------------------
     |
