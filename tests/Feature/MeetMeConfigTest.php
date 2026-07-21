@@ -13,7 +13,7 @@ it('exposes every meetme config key', function () {
 });
 
 it('has sane defaults without any env configuration', function () {
-    expect(config('meetme.conference_name'))->toBe('Your Conference')
+    expect(config('meetme.conference_name'))->toBe('Laracon')
         ->and(config('meetme.starts_at'))->toBeNull()
         ->and(config('meetme.ends_at'))->toBeNull()
         ->and(config('meetme.question_pool_size'))->toBe(15)

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'conference_name' => env('MEETME_CONFERENCE_NAME', 'Your Conference'),
+    'conference_name' => env('MEETME_CONFERENCE_NAME', 'Laracon'),
 
     'starts_at' => env('MEETME_STARTS_AT'),
 
