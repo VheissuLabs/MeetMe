@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\AnthropicQuestionGenerator;
+use App\Services\QuestionGenerator;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +12,10 @@ use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->bind(QuestionGenerator::class, AnthropicQuestionGenerator::class);
+    }
 
     public function boot(): void
     {

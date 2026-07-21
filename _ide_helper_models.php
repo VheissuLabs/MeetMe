@@ -14,24 +14,17 @@
 namespace App\Models{
 /**
  * @property string $id
- * @property int $user_id
  * @property string $question
- * @property string|null $meeting_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read \App\Models\User $user
  * @method static \Database\Factories\IcebreakerQuestionFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion for(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion unconsumed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion whereMeetingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion whereQuestion($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion whereUserId($value)
  * @mixin \Eloquent
  */
 	#[\AllowDynamicProperties]

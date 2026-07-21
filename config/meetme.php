@@ -21,18 +21,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Icebreaker Question Pools
+    | Icebreaker Questions
     |--------------------------------------------------------------------------
     |
-    | Questions are pre-generated per user so scans never wait on AI. When a
-    | user's unconsumed pool drops below the watermark, a top-up job is
-    | dispatched.
+    | One shared pool of generic AI-generated questions, created once via
+    | `meetme:generate-questions`. The AI never receives user data. Scans
+    | never wait on AI — they read from this pool synchronously.
     |
     */
 
-    'question_pool_size' => (int) env('MEETME_QUESTION_POOL_SIZE', 15),
-
-    'pool_low_watermark' => (int) env('MEETME_POOL_LOW_WATERMARK', 3),
+    'question_count' => (int) env('MEETME_QUESTION_COUNT', 50),
 
     /*
     |--------------------------------------------------------------------------
