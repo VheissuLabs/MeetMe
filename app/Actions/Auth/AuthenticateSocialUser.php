@@ -44,6 +44,10 @@ class AuthenticateSocialUser
                 'avatar_url' => $socialUser->getAvatar(),
             ]);
 
+            if ($provider === SocialProvider::X && blank($user->x_username)) {
+                $user->update(['x_username' => $socialUser->getNickname()]);
+            }
+
             return $user;
         });
     }
