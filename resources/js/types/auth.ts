@@ -5,6 +5,12 @@ export type User = {
     avatar?: string
     email_verified_at: string | null
     two_factor_enabled?: boolean
+    pronouns: string | null
+    x_username: string | null
+    bluesky_handle: string | null
+    avatar_url: string | null
+    avatar_source: 'github' | 'x' | 'gravatar'
+    email_visible: boolean
     created_at: string
     updated_at: string
     [key: string]: unknown

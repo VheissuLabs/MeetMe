@@ -59,6 +59,7 @@ namespace App\Models{
  * @property \App\Enums\AvatarSource $avatar_source
  * @property string|null $pronouns
  * @property bool $email_visible
+ * @property string|null $x_username
  * @property-read \App\Models\SocialAccount|null $githubAccount
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
@@ -88,6 +89,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorRecoveryCodes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereXUsername($value)
  * @mixin \Eloquent
  */
 	#[\AllowDynamicProperties]

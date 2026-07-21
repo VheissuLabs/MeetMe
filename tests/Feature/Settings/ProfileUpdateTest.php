@@ -83,3 +83,101 @@ test('correct password must be provided to delete account', function () {
 
     expect($user->fresh())->not->toBeNull();
 });
+
+test('meetme profile fields can be updated', function () {
+    $user = User::factory()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'pronouns' => 'she/her',
+            'x_username' => 'karlbuilds',
+            'bluesky_handle' => 'karl.dev',
+            'email_visible' => '1',
+        ]);
+
+    $response->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->pronouns)->toBe('she/her')
+        ->and($user->x_username)->toBe('karlbuilds')
+        ->and($user->bluesky_handle)->toBe('karl.dev')
+        ->and($user->email_visible)->toBeTrue();
+});
+
+test('handles are normalized before saving', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+        'x_username' => '@karlbuilds',
+        'bluesky_handle' => '@Karl.BSKY.social',
+    ])->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->x_username)->toBe('karlbuilds')
+        ->and($user->bluesky_handle)->toBe('karl.bsky.social');
+});
+
+test('unchecking email visibility turns it off', function () {
+    $user = User::factory()->create(['email_visible' => true]);
+
+    $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+    ])->assertSessionHasNoErrors();
+
+    expect($user->refresh()->email_visible)->toBeFalse();
+});
+
+test('invalid meetme profile fields are rejected', function (array $input, string $field) {
+    $user = User::factory()->create();
+
+    $this
+        ->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            ...$input,
+        ])
+        ->assertSessionHasErrors($field);
+})->with([
+    'pronouns too long' => [['pronouns' => str_repeat('x', 31)], 'pronouns'],
+    'x username with spaces' => [['x_username' => 'not a handle'], 'x_username'],
+    'x username too long' => [['x_username' => str_repeat('a', 16)], 'x_username'],
+    'bluesky without a domain' => [['bluesky_handle' => 'not-a-domain'], 'bluesky_handle'],
+]);
+
+test('the profile form supports precognitive validation', function () {
+    $user = User::factory()->create();
+
+    $this
+        ->actingAs($user)
+        ->withHeaders(['Precognition' => 'true', 'Precognition-Validate-Only' => 'x_username'])
+        ->patchJson(route('profile.update'), ['x_username' => 'bad handle!'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('x_username');
+});
+
+test('clearing optional fields nulls them', function () {
+    $user = User::factory()->withSocials()->create();
+
+    $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+        'pronouns' => '',
+        'x_username' => '',
+        'bluesky_handle' => '',
+    ])->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->pronouns)->toBeNull()
+        ->and($user->x_username)->toBeNull()
+        ->and($user->bluesky_handle)->toBeNull();
+});
