@@ -2,6 +2,7 @@
     import { Form, Head } from '@inertiajs/vue3'
     import InputError from '@/components/InputError.vue'
     import PasswordInput from '@/components/PasswordInput.vue'
+    import SocialLoginButtons from '@/components/SocialLoginButtons.vue'
     import TextLink from '@/components/TextLink.vue'
     import { Button } from '@/components/ui/button'
     import { Input } from '@/components/ui/input'
@@ -100,6 +101,8 @@
                 Create account
             </Button>
         </div>
+
+        <SocialLoginButtons />
 
         <div class="text-center text-sm text-muted-foreground">
             Already have an account?
