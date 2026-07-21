@@ -92,6 +92,11 @@
             "@php artisan boost:update --ansi",
             "@php artisan ide-helper:generate"
         ],
+        "generate": [
+            "@php artisan wayfinder:generate --with-form",
+            "@php artisan ide-helper:generate",
+            "@ide:models"
+        ],
         "ide:models": [
             "@php artisan ide-helper:models --write-mixin --no-interaction",
             "@php scripts/flatten-docblocks.php"
