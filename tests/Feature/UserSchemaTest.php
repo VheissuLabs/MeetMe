@@ -1,7 +1,10 @@
 <?php
 
 use App\Enums\AvatarSource;
+use App\Enums\SocialProvider;
+use App\Models\SocialAccount;
 use App\Models\User;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Str;
 
 it('generates a qr_token when a user is created', function () {
@@ -38,18 +41,36 @@ it('defaults to a github avatar source and hidden email', function () {
         ->and($user->email_visible)->toBeFalse();
 });
 
-it('stores github identity via the factory state', function () {
+it('links a github social account via the factory state', function () {
     $user = User::factory()->withGithub()->create();
 
-    expect($user->github_id)->not->toBeNull()
-        ->and($user->github_username)->not->toBeNull();
+    expect($user->githubAccount)->not->toBeNull()
+        ->and($user->githubAccount->provider)->toBe(SocialProvider::Github)
+        ->and($user->githubAccount->provider_id)->not->toBeNull()
+        ->and($user->githubAccount->username)->not->toBeNull();
 });
 
-it('stores x identity and socials via the factory states', function () {
+it('links an x account and socials via the factory states', function () {
     $user = User::factory()->withSocials()->create();
 
-    expect($user->x_id)->not->toBeNull()
-        ->and($user->x_username)->not->toBeNull()
+    expect($user->xAccount)->not->toBeNull()
+        ->and($user->xAccount->provider)->toBe(SocialProvider::X)
         ->and($user->bluesky_handle)->toEndWith('.bsky.social')
         ->and($user->pronouns)->not->toBeNull();
 });
+
+it('rejects duplicate provider identities', function () {
+    $account = SocialAccount::factory()->github()->create();
+
+    SocialAccount::factory()->github()->create([
+        'provider_id' => $account->provider_id,
+    ]);
+})->throws(UniqueConstraintViolationException::class);
+
+it('rejects a second account for the same provider on one user', function () {
+    $user = User::factory()->withGithub()->create();
+
+    SocialAccount::factory()->github()->create([
+        'user_id' => $user->id,
+    ]);
+})->throws(UniqueConstraintViolationException::class);

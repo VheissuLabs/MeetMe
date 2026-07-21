@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\AvatarSource;
+use App\Enums\SocialProvider;
 use App\Observers\UserObserver;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\Contracts\PasskeyUser;
@@ -47,5 +50,23 @@ class User extends Authenticatable implements PasskeyUser
             'avatar_source' => AvatarSource::class,
             'email_visible' => 'boolean',
         ];
+    }
+
+    /** @return HasMany<SocialAccount, $this> */
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
+
+    /** @return HasOne<SocialAccount, $this> */
+    public function githubAccount(): HasOne
+    {
+        return $this->hasOne(SocialAccount::class)->where('provider', SocialProvider::Github);
+    }
+
+    /** @return HasOne<SocialAccount, $this> */
+    public function xAccount(): HasOne
+    {
+        return $this->hasOne(SocialAccount::class)->where('provider', SocialProvider::X);
     }
 }

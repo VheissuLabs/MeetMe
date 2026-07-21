@@ -59,19 +59,15 @@ class UserFactory extends Factory
 
     public function withGithub(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'github_id' => fake()->unique()->randomNumber(8),
-            'github_username' => fake()->unique()->userName(),
-            'avatar_source' => AvatarSource::Github,
-        ]);
+        return $this->has(SocialAccountFactory::new()->github(), 'socialAccounts')
+            ->state(fn (array $attributes) => [
+                'avatar_source' => AvatarSource::Github,
+            ]);
     }
 
     public function withX(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'x_id' => (string) fake()->unique()->randomNumber(9),
-            'x_username' => fake()->unique()->userName(),
-        ]);
+        return $this->has(SocialAccountFactory::new()->x(), 'socialAccounts');
     }
 
     public function withSocials(): static
