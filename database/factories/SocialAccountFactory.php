@@ -7,14 +7,10 @@ use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<SocialAccount>
- */
+/** @extends Factory<SocialAccount> */
 class SocialAccountFactory extends Factory
 {
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     public function definition(): array
     {
         return [
