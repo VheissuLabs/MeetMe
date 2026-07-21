@@ -23,8 +23,26 @@
         },
     })
 
+    const props = defineProps<{
+        avatarOptions: Partial<Record<'github' | 'x' | 'gravatar', string>>
+    }>()
+
     const page = usePage()
     const user = computed(() => page.props.auth.user)
+
+    const avatarSourceLabels: Record<string, string> = {
+        github: 'GitHub',
+        x: 'X',
+        gravatar: 'Gravatar',
+    }
+
+    const avatarChoices = computed(() =>
+        Object.entries(props.avatarOptions).map(([source, url]) => ({
+            source,
+            url,
+            label: avatarSourceLabels[source] ?? source,
+        })),
+    )
 </script>
 
 <template>
@@ -108,6 +126,34 @@
                     @change="validate('bluesky_handle')"
                 />
                 <InputError class="mt-2" :message="errors.bluesky_handle" />
+            </div>
+
+            <div class="grid gap-2">
+                <Label>Profile photo</Label>
+                <div class="mt-1 grid grid-cols-3 gap-2">
+                    <label
+                        v-for="choice in avatarChoices"
+                        :key="choice.source"
+                        class="flex cursor-pointer flex-col items-center gap-2 rounded-lg border p-3 text-sm transition-colors has-checked:border-primary has-checked:bg-accent"
+                    >
+                        <input
+                            type="radio"
+                            name="avatar_source"
+                            :value="choice.source"
+                            :checked="user.avatar_source === choice.source"
+                            class="sr-only"
+                        />
+                        <img
+                            :src="choice.url"
+                            :alt="`${choice.label} avatar preview`"
+                            class="size-14 rounded-full object-cover"
+                            loading="lazy"
+                        />
+                        <span>{{ choice.label }}</span>
+                    </label>
+                </div>
+                <p class="text-sm text-muted-foreground">Your photo comes from the platform you pick — no uploads.</p>
+                <InputError class="mt-2" :message="errors.avatar_source" />
             </div>
 
             <div class="grid gap-2">
