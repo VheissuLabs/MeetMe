@@ -6,6 +6,7 @@
             "remove_inheritdoc": true
         },
         "no_empty_phpdoc": true,
+        "phpdoc_separation": false,
         "no_empty_comment": true,
         "phpdoc_trim": true
     }

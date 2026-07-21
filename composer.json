@@ -58,6 +58,7 @@
             "@php artisan dev"
         ],
         "lint": [
+            "@php scripts/flatten-docblocks.php",
             "pint --parallel",
             "npm run format"
         ],
@@ -91,7 +92,8 @@
             "@php artisan ide-helper:generate"
         ],
         "ide:models": [
-            "@php artisan ide-helper:models --write-mixin --no-interaction"
+            "@php artisan ide-helper:models --write-mixin --no-interaction",
+            "@php scripts/flatten-docblocks.php"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
