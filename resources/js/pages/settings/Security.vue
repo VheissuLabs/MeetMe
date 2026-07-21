@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
-import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
-import Heading from '@/components/Heading.vue';
-import InputError from '@/components/InputError.vue';
-import type { Props as ManagePasskeysProps } from '@/components/ManagePasskeys.vue';
-import ManagePasskeys from '@/components/ManagePasskeys.vue';
-import type { Props as ManageTwoFactorProps } from '@/components/ManageTwoFactor.vue';
-import ManageTwoFactor from '@/components/ManageTwoFactor.vue';
-import PasswordInput from '@/components/PasswordInput.vue';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/security';
+    import { Form, Head } from '@inertiajs/vue3'
+    import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController'
+    import Heading from '@/components/Heading.vue'
+    import InputError from '@/components/InputError.vue'
+    import type { Props as ManagePasskeysProps } from '@/components/ManagePasskeys.vue'
+    import ManagePasskeys from '@/components/ManagePasskeys.vue'
+    import type { Props as ManageTwoFactorProps } from '@/components/ManageTwoFactor.vue'
+    import ManageTwoFactor from '@/components/ManageTwoFactor.vue'
+    import PasswordInput from '@/components/PasswordInput.vue'
+    import { Button } from '@/components/ui/button'
+    import { Label } from '@/components/ui/label'
+    import { edit } from '@/routes/security'
 
-type Props = {
-    passwordRules: string;
-} & ManagePasskeysProps &
-    ManageTwoFactorProps;
+    type Props = {
+        passwordRules: string
+    } & ManagePasskeysProps &
+        ManageTwoFactorProps
 
-const props = defineProps<Props>();
+    const props = defineProps<Props>()
 
-defineOptions({
-    layout: {
-        breadcrumbs: [
-            {
-                title: 'Security settings',
-                href: edit(),
-            },
-        ],
-    },
-});
+    defineOptions({
+        layout: {
+            breadcrumbs: [
+                {
+                    title: 'Security settings',
+                    href: edit(),
+                },
+            ],
+        },
+    })
 </script>
 
 <template>
@@ -49,11 +49,7 @@ defineOptions({
                 preserveScroll: true,
             }"
             reset-on-success
-            :reset-on-error="[
-                'password',
-                'password_confirmation',
-                'current_password',
-            ]"
+            :reset-on-error="['password', 'password_confirmation', 'current_password']"
             class="space-y-6"
             v-slot="{ errors, processing }"
         >
@@ -96,12 +92,7 @@ defineOptions({
             </div>
 
             <div class="flex items-center gap-4">
-                <Button
-                    :disabled="processing"
-                    data-test="update-password-button"
-                >
-                    Save
-                </Button>
+                <Button :disabled="processing" data-test="update-password-button"> Save </Button>
             </div>
         </Form>
     </div>
@@ -112,8 +103,5 @@ defineOptions({
         :twoFactorEnabled="twoFactorEnabled"
     />
 
-    <ManagePasskeys
-        :canManagePasskeys="canManagePasskeys"
-        :passkeys="passkeys"
-    />
+    <ManagePasskeys :canManagePasskeys="canManagePasskeys" :passkeys="passkeys" />
 </template>
