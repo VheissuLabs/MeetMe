@@ -23,7 +23,6 @@ npm-debug.log
 yarn-error.log
 /auth.json
 /_ide_helper.php
-/_ide_helper_models.php
 /.fleet
 /.idea
 /.nova

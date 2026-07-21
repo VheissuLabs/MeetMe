@@ -50,7 +50,6 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "@php artisan ide-helper:models --write-mixin --no-interaction",
             "npm install",
             "npm run build"
         ],
@@ -87,7 +86,9 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
             "@php artisan boost:update --ansi",
-            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:generate"
+        ],
+        "ide:models": [
             "@php artisan ide-helper:models --write-mixin --no-interaction"
         ],
         "post-root-package-install": [
