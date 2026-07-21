@@ -11,10 +11,6 @@ use Laravel\Socialite\Contracts\User as SocialiteUser;
 
 class AuthenticateSocialUser
 {
-    /**
-     * Resolve the local user for an OAuth callback: match the provider
-     * identity, else link by email, else create a passwordless user.
-     */
     public function handle(SocialProvider $provider, SocialiteUser $socialUser): User
     {
         return DB::transaction(function () use ($provider, $socialUser) {
