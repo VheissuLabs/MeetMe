@@ -42,7 +42,7 @@ foreach ($directories as $directory) {
                     fn (string $line): string => "{$indent} * {$line}\n",
                     $content,
                 ))."{$indent} */\n",
-                default => $matches[0],
+                default => '',
             };
         }, $original);
 

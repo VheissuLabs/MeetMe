@@ -3,6 +3,7 @@
     import InputError from '@/components/InputError.vue'
     import PasskeyVerify from '@/components/PasskeyVerify.vue'
     import PasswordInput from '@/components/PasswordInput.vue'
+    import SocialLoginButtons from '@/components/SocialLoginButtons.vue'
     import TextLink from '@/components/TextLink.vue'
     import { Button } from '@/components/ui/button'
     import { Checkbox } from '@/components/ui/checkbox'
@@ -87,6 +88,8 @@
                 Log in
             </Button>
         </div>
+
+        <SocialLoginButtons />
 
         <div class="text-center text-sm text-muted-foreground">
             Don't have an account?
