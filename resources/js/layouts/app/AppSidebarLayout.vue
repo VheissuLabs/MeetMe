@@ -3,6 +3,7 @@
     import AppShell from '@/components/AppShell.vue'
     import AppSidebar from '@/components/AppSidebar.vue'
     import AppSidebarHeader from '@/components/AppSidebarHeader.vue'
+    import MeetingRealtime from '@/components/MeetingRealtime.vue'
     import { Toaster } from '@/components/ui/sonner'
     import type { BreadcrumbItem } from '@/types'
 
@@ -20,6 +21,7 @@
         <AppSidebar />
         <AppContent variant="sidebar" class="overflow-x-hidden">
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
+            <MeetingRealtime />
             <slot />
         </AppContent>
         <Toaster />
