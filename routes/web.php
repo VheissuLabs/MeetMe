@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialCallbackController;
 use App\Http\Controllers\Auth\SocialRedirectController;
+use App\Http\Controllers\InboxController;
 use App\Http\Controllers\MeetingAnswerController;
 use App\Http\Controllers\MeetingAnswerRedactionController;
 use App\Http\Controllers\MeetingController;
@@ -23,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('throttle:meetme-scan')
         ->name('meetings.store');
     Route::get('meetings/{meeting}', [MeetingController::class, 'show'])->name('meetings.show');
+    Route::get('inbox', InboxController::class)->name('inbox');
     Route::patch('meetings/{meeting}/answer', MeetingAnswerController::class)
         ->middleware(HandlePrecognitiveRequests::class)
         ->name('meetings.answer');
