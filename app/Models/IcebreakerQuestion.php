@@ -22,7 +22,7 @@ class IcebreakerQuestion extends Model
         'updated_at',
     ];
 
-    /** @param list<string> $ids */
+    /** @param array<int, string> $ids */
     public static function randomExcluding(array $ids = []): ?self
     {
         return self::query()

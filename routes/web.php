@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialCallbackController;
 use App\Http\Controllers\Auth\SocialRedirectController;
+use App\Http\Controllers\MeetingController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
@@ -13,6 +14,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+
+    Route::post('meetings', [MeetingController::class, 'store'])
+        ->middleware('throttle:meetme-scan')
+        ->name('meetings.store');
+    Route::get('meetings/{meeting}', [MeetingController::class, 'show'])->name('meetings.show');
 });
 
 require __DIR__.'/settings.php';
