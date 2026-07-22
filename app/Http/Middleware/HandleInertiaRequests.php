@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\MeetingStatus;
+use App\Models\Meeting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -31,6 +33,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'score' => fn (): int => $request->user()?->score() ?? 0,
+            'pendingCount' => fn (): int => $request->user() === null ? 0 : Meeting::query()
+                ->where('recipient_id', $request->user()->id)
+                ->where('status', MeetingStatus::Answered)
+                ->count(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

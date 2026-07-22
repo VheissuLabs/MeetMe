@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialCallbackController;
 use App\Http\Controllers\Auth\SocialRedirectController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\MeetingAnswerController;
 use App\Http\Controllers\MeetingAnswerRedactionController;
@@ -18,7 +19,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::post('meetings', [MeetingController::class, 'store'])
         ->middleware('throttle:meetme-scan')
