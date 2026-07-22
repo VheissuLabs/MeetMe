@@ -1,9 +1,11 @@
 <script setup lang="ts">
-    import { Form, Head } from '@inertiajs/vue3'
-    import { computed } from 'vue'
+    import { Form, Head, router } from '@inertiajs/vue3'
+    import { computed, ref } from 'vue'
     import MeetingAnswerController from '@/actions/App/Http/Controllers/MeetingAnswerController'
+    import MeetingResolveController from '@/actions/App/Http/Controllers/MeetingResolveController'
     import Heading from '@/components/Heading.vue'
     import InputError from '@/components/InputError.vue'
+    import StarRating from '@/components/StarRating.vue'
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { Badge } from '@/components/ui/badge'
     import { Button } from '@/components/ui/button'
@@ -61,6 +63,31 @@
 
         return byState[props.meeting.status][props.meeting.isInitiator ? 'initiator' : 'recipient']
     })
+
+    const canResolve = computed(() => !props.meeting.isInitiator && props.meeting.status === 'answered')
+
+    const rating = ref<number | null>(null)
+    const resolving = ref(false)
+
+    function resolve(status: 'confirmed' | 'rejected') {
+        resolving.value = true
+
+        router.patch(
+            MeetingResolveController(props.meeting.id).url,
+            status === 'confirmed' ? { status, rating: rating.value } : { status },
+            {
+                preserveScroll: true,
+                optimistic: (props: Record<string, unknown>) => ({
+                    meeting: {
+                        ...(props.meeting as object),
+                        status,
+                        rating: status === 'confirmed' ? rating.value : null,
+                    },
+                }),
+                onFinish: () => (resolving.value = false),
+            },
+        )
+    }
 </script>
 
 <template>
@@ -131,6 +158,36 @@
                     Answer redacted
                 </p>
                 <p v-else data-test="answer">{{ meeting.answer }}</p>
+            </CardContent>
+        </Card>
+
+        <Card v-if="canResolve">
+            <CardHeader>
+                <CardTitle>Did they get it right?</CardTitle>
+            </CardHeader>
+            <CardContent class="space-y-4">
+                <p class="text-sm text-muted-foreground">
+                    Rate how well they captured your answer — rating confirms the meeting and scores you both a point.
+                </p>
+                <StarRating v-model="rating" />
+                <div class="flex items-center gap-3">
+                    <Button
+                        :disabled="rating === null || resolving"
+                        data-test="confirm-meeting"
+                        @click="resolve('confirmed')"
+                    >
+                        <Spinner v-if="resolving" />
+                        Confirm
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        :disabled="resolving"
+                        data-test="reject-meeting"
+                        @click="resolve('rejected')"
+                    >
+                        Didn't happen
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     </div>

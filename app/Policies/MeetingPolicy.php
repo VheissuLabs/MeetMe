@@ -17,4 +17,9 @@ class MeetingPolicy
     {
         return $user->id === $meeting->initiator_id && $meeting->status === MeetingStatus::Pending;
     }
+
+    public function resolve(User $user, Meeting $meeting): bool
+    {
+        return $user->id === $meeting->recipient_id && $meeting->status === MeetingStatus::Answered;
+    }
 }
