@@ -69,4 +69,9 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasOne(SocialAccount::class)->where('provider', SocialProvider::X);
     }
+
+    public function score(): int
+    {
+        return Meeting::query()->confirmed()->involving($this)->count();
+    }
 }
