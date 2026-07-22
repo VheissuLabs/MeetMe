@@ -33,6 +33,51 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * @property string $id
+ * @property int $initiator_id
+ * @property int $recipient_id
+ * @property string|null $icebreaker_question_id
+ * @property string $question
+ * @property string|null $answer
+ * @property int|null $rating
+ * @property \Carbon\CarbonImmutable|null $answer_redacted_at
+ * @property \App\Enums\MeetingStatus $status
+ * @property string $pair_key
+ * @property \Carbon\CarbonImmutable|null $answered_at
+ * @property \Carbon\CarbonImmutable|null $resolved_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \App\Models\IcebreakerQuestion|null $icebreakerQuestion
+ * @property-read \App\Models\User $initiator
+ * @property-read \App\Models\User $recipient
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting confirmed()
+ * @method static \Database\Factories\MeetingFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting involving(\App\Models\User $user)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereAnswerRedactedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereAnsweredAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereIcebreakerQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereInitiatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting wherePairKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereQuestion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereRecipientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereResolvedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	#[\AllowDynamicProperties]
+	class IdeHelperMeeting {}
+}
+
+namespace App\Models{
+/**
  * @property int $id
  * @property int $user_id
  * @property \App\Enums\SocialProvider $provider
