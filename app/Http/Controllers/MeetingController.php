@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\SelectIcebreakerQuestion;
+use App\Enums\MeetingStatus;
 use App\Http\Requests\MeetingStoreRequest;
 use App\Models\Meeting;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -42,15 +43,22 @@ class MeetingController extends Controller
     {
         Gate::authorize('view', $meeting);
 
+        $isInitiator = $meeting->initiator_id === $request->user()->id;
+
         return Inertia::render('meetings/Show', [
             'meeting' => [
                 'id' => $meeting->id,
                 'status' => $meeting->status,
-                'question' => $meeting->question,
+                // The question is the recipient's own icebreaker — revealing it
+                // before it has been asked out loud spoils the game.
+                'question' => $isInitiator || $meeting->status !== MeetingStatus::Pending
+                    ? $meeting->question
+                    : null,
                 'answer' => $meeting->answer,
+                'answerRedacted' => $meeting->answer_redacted_at !== null,
                 'rating' => $meeting->rating,
-                'isInitiator' => $meeting->initiator_id === $request->user()->id,
-                'otherParty' => $meeting->initiator_id === $request->user()->id
+                'isInitiator' => $isInitiator,
+                'otherParty' => $isInitiator
                     ? $meeting->recipient->only(['name', 'pronouns', 'avatar_url'])
                     : $meeting->initiator->only(['name', 'pronouns', 'avatar_url']),
             ],
