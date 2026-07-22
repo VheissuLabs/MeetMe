@@ -1,10 +1,16 @@
 <script setup lang="ts">
-    import { Head } from '@inertiajs/vue3'
+    import { Form, Head } from '@inertiajs/vue3'
     import { computed } from 'vue'
+    import MeetingAnswerController from '@/actions/App/Http/Controllers/MeetingAnswerController'
     import Heading from '@/components/Heading.vue'
+    import InputError from '@/components/InputError.vue'
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { Badge } from '@/components/ui/badge'
+    import { Button } from '@/components/ui/button'
     import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+    import { Label } from '@/components/ui/label'
+    import { Spinner } from '@/components/ui/spinner'
+    import { Textarea } from '@/components/ui/textarea'
     import { useInitials } from '@/composables/useInitials'
 
     const props = defineProps<{
@@ -82,8 +88,32 @@
             <CardHeader>
                 <CardTitle>Icebreaker</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent class="space-y-4">
                 <p class="text-lg" data-test="question">{{ meeting.question }}</p>
+
+                <Form
+                    v-if="meeting.isInitiator && meeting.status === 'pending'"
+                    v-bind="MeetingAnswerController.form(meeting.id)"
+                    class="space-y-3"
+                    v-slot="{ errors, processing, validate }"
+                >
+                    <div class="grid gap-2">
+                        <Label for="answer">Their answer</Label>
+                        <Textarea
+                            id="answer"
+                            name="answer"
+                            required
+                            rows="3"
+                            placeholder="Type what they said…"
+                            @change="validate('answer')"
+                        />
+                        <InputError :message="errors.answer" />
+                    </div>
+                    <Button type="submit" :disabled="processing" data-test="submit-answer">
+                        <Spinner v-if="processing" />
+                        Send for confirmation
+                    </Button>
+                </Form>
             </CardContent>
         </Card>
 
