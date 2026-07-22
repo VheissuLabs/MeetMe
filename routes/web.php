@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\SocialCallbackController;
 use App\Http\Controllers\Auth\SocialRedirectController;
 use App\Http\Controllers\MeetingAnswerController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\MeetingResolveController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('meetings/{meeting}/answer', MeetingAnswerController::class)
         ->middleware(HandlePrecognitiveRequests::class)
         ->name('meetings.answer');
+    Route::patch('meetings/{meeting}/resolve', MeetingResolveController::class)->name('meetings.resolve');
 });
 
 require __DIR__.'/settings.php';
