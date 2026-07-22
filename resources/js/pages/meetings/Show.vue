@@ -2,6 +2,7 @@
     import { Form, Head, router } from '@inertiajs/vue3'
     import { computed, ref } from 'vue'
     import MeetingAnswerController from '@/actions/App/Http/Controllers/MeetingAnswerController'
+    import MeetingAnswerRedactionController from '@/actions/App/Http/Controllers/MeetingAnswerRedactionController'
     import MeetingResolveController from '@/actions/App/Http/Controllers/MeetingResolveController'
     import Heading from '@/components/Heading.vue'
     import InputError from '@/components/InputError.vue'
@@ -24,6 +25,7 @@
             answerRedacted: boolean
             rating: number | null
             isInitiator: boolean
+            canRedact: boolean
             otherParty: { name: string; pronouns: string | null; avatar_url: string | null }
         }
     }>()
@@ -153,11 +155,22 @@
                     </span>
                 </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent class="space-y-3">
                 <p v-if="meeting.answerRedacted" class="text-muted-foreground italic" data-test="answer-redacted">
                     Answer redacted
                 </p>
                 <p v-else data-test="answer">{{ meeting.answer }}</p>
+
+                <Form
+                    v-if="meeting.canRedact"
+                    v-bind="MeetingAnswerRedactionController.form(meeting.id)"
+                    v-slot="{ processing }"
+                    :options="{ preserveScroll: true }"
+                >
+                    <Button type="submit" variant="ghost" size="sm" :disabled="processing" data-test="redact-answer">
+                        Remove my answer
+                    </Button>
+                </Form>
             </CardContent>
         </Card>
 

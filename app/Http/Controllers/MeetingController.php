@@ -58,6 +58,7 @@ class MeetingController extends Controller
                 'answerRedacted' => $meeting->answer_redacted_at !== null,
                 'rating' => $meeting->rating,
                 'isInitiator' => $isInitiator,
+                'canRedact' => $request->user()->can('redactAnswer', $meeting),
                 'otherParty' => $isInitiator
                     ? $meeting->recipient->only(['name', 'pronouns', 'avatar_url'])
                     : $meeting->initiator->only(['name', 'pronouns', 'avatar_url']),

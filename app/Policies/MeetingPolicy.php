@@ -22,4 +22,11 @@ class MeetingPolicy
     {
         return $user->id === $meeting->recipient_id && $meeting->status === MeetingStatus::Answered;
     }
+
+    public function redactAnswer(User $user, Meeting $meeting): bool
+    {
+        return $user->id === $meeting->recipient_id
+            && $meeting->status === MeetingStatus::Confirmed
+            && $meeting->answer !== null;
+    }
 }
