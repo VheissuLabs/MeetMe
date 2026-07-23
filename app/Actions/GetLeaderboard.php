@@ -7,13 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class GetLeaderboard
 {
-    /**
-     * Rank users by confirmed-meeting count (as initiator OR recipient),
-     * ties broken by earliest last-confirmation — reaching a score sooner
-     * beats last-minute sniping. Ratings never feed the ranking. One query.
-     *
-     * @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, score: int}>
-     */
+    /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, score: int}> */
     public function get(): array
     {
         $participations = DB::table('meetings')

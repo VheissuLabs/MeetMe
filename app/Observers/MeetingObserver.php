@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Enums\MeetingStatus;
+use App\Events\LeaderboardChanged;
 use App\Events\MeetingAwaitingConfirmation;
 use App\Events\MeetingResolved;
 use App\Models\Meeting;
@@ -25,5 +26,9 @@ class MeetingObserver
             MeetingStatus::Confirmed, MeetingStatus::Rejected => MeetingResolved::dispatch($meeting),
             default => null,
         };
+
+        if ($meeting->status === MeetingStatus::Confirmed) {
+            LeaderboardChanged::dispatch();
+        }
     }
 }

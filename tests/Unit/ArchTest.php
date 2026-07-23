@@ -9,6 +9,7 @@ arch('broadcasting originates in observers, never controllers')
     ->not->toUse([
         'App\Events\MeetingAwaitingConfirmation',
         'App\Events\MeetingResolved',
+        'App\Events\LeaderboardChanged',
         'Illuminate\Support\Facades\Broadcast',
         'broadcast',
     ]);

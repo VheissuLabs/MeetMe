@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { Head } from '@inertiajs/vue3'
+    import { Head, router } from '@inertiajs/vue3'
+    import { useEcho } from '@laravel/echo-vue'
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { useInitials } from '@/composables/useInitials'
 
@@ -9,6 +10,10 @@
     }>()
 
     const { getInitials } = useInitials()
+
+    // Dumb event, smart refetch: the broadcast carries no payload, so we
+    // just reload the rankings prop when a meeting confirms.
+    useEcho('leaderboard', '.LeaderboardChanged', () => router.reload({ only: ['rankings'] }), [], 'public')
 
     const medal = (rank: number): string => ['🥇', '🥈', '🥉'][rank] ?? ''
 </script>
