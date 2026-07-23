@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\SelectIcebreakerQuestion;
+use App\Actions\RecordScan;
 use App\Enums\MeetingStatus;
 use App\Http\Requests\MeetingStoreRequest;
 use App\Models\Meeting;
-use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -15,28 +14,15 @@ use Inertia\Response;
 
 class MeetingController extends Controller
 {
-    public function store(MeetingStoreRequest $request, SelectIcebreakerQuestion $selectQuestion): RedirectResponse
+    public function store(MeetingStoreRequest $request, RecordScan $recordScan): RedirectResponse
     {
-        $initiator = $request->user();
-        $recipient = $request->recipient();
+        $meeting = $recordScan->between($request->user(), $request->recipient());
 
-        if ($existing = Meeting::between($initiator, $recipient)) {
-            return redirect()
-                ->route('meetings.show', $existing)
-                ->with('toast', ['type' => 'info', 'message' => __("You two have already met — here's your meeting.")]);
-        }
-
-        try {
-            $meeting = Meeting::create([
-                'initiator_id' => $initiator->id,
-                'recipient_id' => $recipient->id,
-                ...$selectQuestion->for($recipient),
-            ]);
-        } catch (UniqueConstraintViolationException) {
-            return redirect()->route('meetings.show', Meeting::between($initiator, $recipient));
-        }
-
-        return redirect()->route('meetings.show', $meeting);
+        return redirect()
+            ->route('meetings.show', $meeting)
+            ->with('toast', $meeting->wasRecentlyCreated
+                ? null
+                : ['type' => 'info', 'message' => __("You two have already met — here's your meeting.")]);
     }
 
     public function show(Request $request, Meeting $meeting): Response
