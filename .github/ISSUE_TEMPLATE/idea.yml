@@ -1,0 +1,24 @@
+name: 💡 Idea
+description: Suggest a feature or improvement for MeetMe
+title: 'Idea: '
+labels: ['idea']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! Keep it lightweight — a sentence or two is plenty.
+  - type: textarea
+    id: idea
+    attributes:
+      label: What's the idea?
+      description: What would you like MeetMe to do?
+      placeholder: It would be great if…
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would it help?
+      description: What problem does it solve, or who does it help?
+    validations:
+      required: false

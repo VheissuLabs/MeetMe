@@ -74,4 +74,15 @@ class User extends Authenticatable implements PasskeyUser
     {
         return Meeting::query()->confirmed()->involving($this)->count();
     }
+
+    public function averageAnswerRating(): ?float
+    {
+        $average = Meeting::query()
+            ->confirmed()
+            ->where('initiator_id', $this->id)
+            ->whereNotNull('rating')
+            ->avg('rating');
+
+        return $average === null ? null : round((float) $average, 1);
+    }
 }

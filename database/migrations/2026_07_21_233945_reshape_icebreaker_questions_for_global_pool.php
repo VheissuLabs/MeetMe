@@ -9,10 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('icebreaker_questions', function (Blueprint $table) {
+            // Release the foreign key before its backing index — MySQL refuses
+            // to drop an index a constraint still depends on.
+            $table->dropForeign(['user_id']);
             $table->dropIndex(['user_id', 'meeting_id']);
             $table->dropUnique(['meeting_id']);
-            $table->dropConstrainedForeignId('user_id');
-            $table->dropColumn('meeting_id');
+            $table->dropColumn(['user_id', 'meeting_id']);
         });
     }
 
