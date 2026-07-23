@@ -4,7 +4,7 @@
     import PendingInbox from '@/components/PendingInbox.vue'
     import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
     import { Card, CardContent } from '@/components/ui/card'
-    import { dashboard } from '@/routes'
+    import { connections, dashboard } from '@/routes'
     import { edit as profileEdit } from '@/routes/profile'
 
     defineProps<{
@@ -40,10 +40,10 @@
                 <p class="text-sm text-muted-foreground">Let someone scan this to meet you</p>
                 <!-- eslint-disable-next-line vue/no-v-html -- server-generated QR SVG, no user input -->
                 <div class="w-full max-w-[320px] [&_svg]:h-auto [&_svg]:w-full" v-html="qrSvg" />
-                <div class="text-center">
+                <Link :href="connections()" prefetch class="text-center transition-opacity hover:opacity-70">
                     <p class="text-4xl font-bold" data-test="score">{{ score }}</p>
                     <p class="text-sm text-muted-foreground">{{ score === 1 ? 'connection' : 'connections' }}</p>
-                </div>
+                </Link>
             </CardContent>
         </Card>
 
