@@ -1,10 +1,8 @@
 <?php
 
-/**
- * Enforces the project docblock style: prose lines are stripped from
- * tag-bearing docblocks, and docblocks left with a single tag collapse
- * to one line. Runs as part of `composer lint` and `composer ide:models`.
- */
+// Enforces the project docblock style: prose is stripped from tag-bearing
+// docblocks, single-tag blocks collapse to one line, and prose-only blocks
+// are removed. Runs as a fixer in `composer lint` and `composer ide:models`.
 $directories = ['app', 'database', 'routes', 'tests', 'bootstrap'];
 
 $pattern = '#^([ \t]*)/\*\*\n((?:\1 \*[^\n]*\n)+?)\1 \*/\n#m';

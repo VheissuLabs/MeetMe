@@ -1,8 +1,10 @@
 <?php
 
+use App\Events\LeaderboardChanged;
 use App\Events\MeetingAwaitingConfirmation;
 use App\Events\MeetingResolved;
 use App\Models\Meeting;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Support\Facades\Event;
@@ -73,4 +75,41 @@ it('both events implement ShouldBroadcast', function () {
         ->toBeInstanceOf(ShouldBroadcast::class)
         ->and(new MeetingResolved(Meeting::factory()->create()))
         ->toBeInstanceOf(ShouldBroadcast::class);
+});
+
+it('broadcasts a payload-free LeaderboardChanged on the public channel when confirmed', function () {
+    Event::fake([LeaderboardChanged::class]);
+    $meeting = Meeting::factory()->answered()->create();
+
+    $this->actingAs($meeting->recipient)
+        ->patch(route('meetings.resolve', $meeting), ['status' => 'confirmed', 'rating' => 5]);
+
+    Event::assertDispatched(LeaderboardChanged::class, function ($event) {
+        $channels = $event->broadcastOn();
+
+        return $channels[0] instanceof Channel
+            && ! $channels[0] instanceof PrivateChannel
+            && $channels[0]->name === 'leaderboard'
+            && $event->broadcastAs() === 'LeaderboardChanged';
+    });
+});
+
+it('does not touch the leaderboard when a meeting is rejected', function () {
+    Event::fake([LeaderboardChanged::class]);
+    $meeting = Meeting::factory()->answered()->create();
+
+    $this->actingAs($meeting->recipient)
+        ->patch(route('meetings.resolve', $meeting), ['status' => 'rejected']);
+
+    Event::assertNotDispatched(LeaderboardChanged::class);
+});
+
+it('does not broadcast LeaderboardChanged when a meeting is merely answered', function () {
+    Event::fake([LeaderboardChanged::class]);
+    $meeting = Meeting::factory()->create();
+
+    $this->actingAs($meeting->initiator)
+        ->patch(route('meetings.answer', $meeting), ['answer' => 'A great answer.']);
+
+    Event::assertNotDispatched(LeaderboardChanged::class);
 });
