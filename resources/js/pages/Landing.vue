@@ -2,7 +2,7 @@
     import { Head, Link } from '@inertiajs/vue3'
     import { GithubIcon } from '@/components/icons'
     import { Button } from '@/components/ui/button'
-    import { register } from '@/routes'
+    import { leaderboard, register } from '@/routes'
     import { redirect as socialRedirect } from '@/routes/social'
 
     const props = defineProps<{ conferenceName: string }>()
@@ -24,7 +24,17 @@
     <Head :title="`MeetMe — ${props.conferenceName}`" />
 
     <div class="min-h-screen bg-background text-foreground">
-        <main class="mx-auto flex max-w-3xl flex-col gap-16 px-6 py-16 sm:py-24">
+        <header class="mx-auto flex max-w-3xl items-center justify-between px-6 py-6">
+            <span class="text-lg font-bold tracking-tight">MeetMe</span>
+            <Link
+                :href="leaderboard()"
+                class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+                Leaderboard
+            </Link>
+        </header>
+
+        <main class="mx-auto flex max-w-3xl flex-col gap-16 px-6 pb-16 sm:pb-24">
             <!-- Hero -->
             <section class="flex flex-col items-center gap-6 text-center">
                 <h1 class="text-4xl font-bold tracking-tight text-balance sm:text-6xl">
