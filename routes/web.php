@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\SocialCallbackController;
 use App\Http\Controllers\Auth\SocialRedirectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InboxController;
+use App\Http\Controllers\MeetController;
 use App\Http\Controllers\MeetingAnswerController;
 use App\Http\Controllers\MeetingAnswerRedactionController;
 use App\Http\Controllers\MeetingController;
@@ -12,6 +13,10 @@ use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
+
+// Deep-link from a scanned QR. Guests are bounced to auth (intended URL
+// stashed) and land back here once signed in to create the meeting.
+Route::get('meet/{qrToken}', MeetController::class)->middleware('auth')->name('meet');
 
 Route::middleware('guest')->group(function () {
     Route::get('auth/{provider}/redirect', SocialRedirectController::class)->name('social.redirect');
