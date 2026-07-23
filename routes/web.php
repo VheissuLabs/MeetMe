@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\SocialRedirectController;
 use App\Http\Controllers\ConnectionsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InboxController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\MeetController;
 use App\Http\Controllers\MeetingAnswerController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\MeetingResolveController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'Welcome')->name('home');
+Route::get('/', LandingController::class)->name('home');
 
 // Public, no auth — designed for the venue TV.
 Route::get('leaderboard', LeaderboardController::class)->name('leaderboard');

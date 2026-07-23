@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Enums\MeetingStatus;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class GetLeaderboard
@@ -10,22 +11,8 @@ class GetLeaderboard
     /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, score: int}> */
     public function get(): array
     {
-        $participations = DB::table('meetings')
-            ->where('status', MeetingStatus::Confirmed->value)
-            ->select('initiator_id as user_id', 'resolved_at')
-            ->unionAll(
-                DB::table('meetings')
-                    ->where('status', MeetingStatus::Confirmed->value)
-                    ->select('recipient_id as user_id', 'resolved_at')
-            );
-
-        $scores = DB::query()
-            ->fromSub($participations, 'participations')
-            ->select('user_id', DB::raw('count(*) as score'), DB::raw('max(resolved_at) as last_confirmed_at'))
-            ->groupBy('user_id');
-
         return DB::query()
-            ->fromSub($scores, 'scores')
+            ->fromSub($this->scores(), 'scores')
             ->join('users', 'users.id', '=', 'scores.user_id')
             ->orderByDesc('scores.score')
             ->orderBy('scores.last_confirmed_at')
@@ -38,5 +25,35 @@ class GetLeaderboard
                 'score' => (int) $row->score,
             ])
             ->all();
+    }
+
+    /** @return array<int, int> */
+    public function positions(): array
+    {
+        return DB::query()
+            ->fromSub($this->scores(), 'scores')
+            ->orderByDesc('scores.score')
+            ->orderBy('scores.last_confirmed_at')
+            ->pluck('user_id')
+            ->values()
+            ->mapWithKeys(fn (mixed $userId, int $index): array => [(int) $userId => $index + 1])
+            ->all();
+    }
+
+    private function scores(): Builder
+    {
+        $participations = DB::table('meetings')
+            ->where('status', MeetingStatus::Confirmed->value)
+            ->select('initiator_id as user_id', 'resolved_at')
+            ->unionAll(
+                DB::table('meetings')
+                    ->where('status', MeetingStatus::Confirmed->value)
+                    ->select('recipient_id as user_id', 'resolved_at')
+            );
+
+        return DB::query()
+            ->fromSub($participations, 'participations')
+            ->select('user_id', DB::raw('count(*) as score'), DB::raw('max(resolved_at) as last_confirmed_at'))
+            ->groupBy('user_id');
     }
 }

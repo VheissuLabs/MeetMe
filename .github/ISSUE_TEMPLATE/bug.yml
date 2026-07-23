@@ -1,0 +1,22 @@
+name: 🐛 Bug
+description: Report something that isn't working
+title: 'Bug: '
+labels: ['bug']
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to…
+        2. Scan…
+        3. See error
+    validations:
+      required: true
