@@ -61,13 +61,18 @@ it('includes the email only when the connection opted in', function () {
 
 it('renders only the social links that exist', function () {
     $user = User::factory()->create();
-    $them = User::factory()->withGithub()->create(['x_username' => 'themonx', 'bluesky_handle' => null]);
+    $them = User::factory()->withGithub()->create([
+        'x_username' => 'themonx',
+        'bluesky_handle' => null,
+        'linkedin_username' => 'them-dev',
+    ]);
     Meeting::factory()->confirmed()->create(['initiator_id' => $user->id, 'recipient_id' => $them->id]);
 
     $this->actingAs($user)
         ->get(route('connections'))
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->where('connections.0.socials.x', 'https://x.com/themonx')
+            ->where('connections.0.socials.linkedin', 'https://www.linkedin.com/in/them-dev')
             ->has('connections.0.socials.github')
             ->missing('connections.0.socials.bluesky'));
 });

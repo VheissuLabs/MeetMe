@@ -1,19 +1,21 @@
 <script setup lang="ts">
-    import { Head } from '@inertiajs/vue3'
+    import { Head, Link } from '@inertiajs/vue3'
     import { Mail } from '@lucide/vue'
     import Heading from '@/components/Heading.vue'
-    import { BlueskyIcon, GithubIcon, XIcon } from '@/components/icons'
+    import { BlueskyIcon, GithubIcon, LinkedInIcon, XIcon } from '@/components/icons'
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { Card, CardContent, CardHeader } from '@/components/ui/card'
     import { useInitials } from '@/composables/useInitials'
     import { connections as connectionsRoute } from '@/routes'
+    import { show as userProfile } from '@/routes/users'
 
     type Connection = {
         meeting_id: string
+        qr_token: string
         name: string
         pronouns: string | null
         avatar_url: string | null
-        socials: { github?: string; x?: string; bluesky?: string }
+        socials: { github?: string; x?: string; bluesky?: string; linkedin?: string }
         email?: string
         question: string
         answer: string | null
@@ -51,7 +53,9 @@
                     </Avatar>
                     <div class="min-w-0 flex-1">
                         <p class="font-semibold">
-                            {{ connection.name }}
+                            <Link :href="userProfile(connection.qr_token)" class="hover:underline">
+                                {{ connection.name }}
+                            </Link>
                             <span v-if="connection.pronouns" class="text-sm font-normal text-muted-foreground">
                                 · {{ connection.pronouns }}
                             </span>
@@ -85,6 +89,17 @@
                                 aria-label="Bluesky"
                             >
                                 <BlueskyIcon
+                                    class="size-4 text-muted-foreground transition-colors hover:text-foreground"
+                                />
+                            </a>
+                            <a
+                                v-if="connection.socials.linkedin"
+                                :href="connection.socials.linkedin"
+                                target="_blank"
+                                rel="noopener"
+                                aria-label="LinkedIn"
+                            >
+                                <LinkedInIcon
                                     class="size-4 text-muted-foreground transition-colors hover:text-foreground"
                                 />
                             </a>

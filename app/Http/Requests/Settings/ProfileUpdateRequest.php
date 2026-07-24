@@ -21,6 +21,7 @@ class ProfileUpdateRequest extends FormRequest
             'pronouns' => ['nullable', 'string', 'max:30'],
             'x_username' => ['nullable', 'string', 'regex:/^[A-Za-z0-9_]{1,15}$/', 'required_if:avatar_source,x'],
             'bluesky_handle' => ['nullable', 'string', 'max:253', 'regex:/^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/i'],
+            'linkedin_username' => ['nullable', 'string', 'regex:/^[A-Za-z0-9\-]{3,100}$/'],
             'email_visible' => ['boolean'],
             'avatar_source' => [
                 'sometimes',
@@ -41,6 +42,7 @@ class ProfileUpdateRequest extends FormRequest
             'x_username.regex' => __('X usernames are 1-15 letters, numbers, or underscores.'),
             'x_username.required_if' => __('Add your X username to use your X photo.'),
             'bluesky_handle.regex' => __('Bluesky handles look like name.bsky.social or your own domain.'),
+            'linkedin_username.regex' => __('LinkedIn profiles look like your linkedin.com/in/ vanity name.'),
         ];
     }
 
@@ -49,8 +51,24 @@ class ProfileUpdateRequest extends FormRequest
         $this->merge([
             'x_username' => blank($this->x_username) ? null : ltrim((string) $this->x_username, '@'),
             'bluesky_handle' => blank($this->bluesky_handle) ? null : ltrim(strtolower((string) $this->bluesky_handle), '@'),
+            'linkedin_username' => $this->normalizeLinkedinUsername($this->linkedin_username),
             'pronouns' => blank($this->pronouns) ? null : $this->pronouns,
             'email_visible' => $this->boolean('email_visible'),
         ]);
+    }
+
+    private function normalizeLinkedinUsername(mixed $value): ?string
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+
+        if (preg_match('~linkedin\.com/in/([^/?#]+)~i', $value, $matches)) {
+            $value = $matches[1];
+        }
+
+        return blank($value) ? null : ltrim($value, '@');
     }
 }
