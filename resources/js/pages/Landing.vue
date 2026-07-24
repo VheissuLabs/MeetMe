@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { Head, Link } from '@inertiajs/vue3'
     import { BlueskyIcon, GithubIcon, XIcon } from '@/components/icons'
+    import LastUsedBadge from '@/components/LastUsedBadge.vue'
     import { Button } from '@/components/ui/button'
     import { leaderboard, register } from '@/routes'
     import { redirect as socialRedirect } from '@/routes/social'
@@ -45,27 +46,39 @@
                     both score. Most connections wins {{ props.conferenceName }}.
                 </p>
                 <div class="flex flex-col gap-3 sm:flex-row">
-                    <Button as-child size="lg">
-                        <a :href="socialRedirect.url('github')">
-                            <GithubIcon class="size-4" />
-                            Sign in with GitHub
-                        </a>
-                    </Button>
-                    <Button as-child size="lg" variant="outline">
-                        <a :href="socialRedirect.url('x')">
-                            <XIcon class="size-4" />
-                            Sign in with X
-                        </a>
-                    </Button>
-                    <Button as-child size="lg" variant="outline">
-                        <a :href="socialRedirect.url('bluesky')">
-                            <BlueskyIcon class="size-4" />
-                            Sign in with Bluesky
-                        </a>
-                    </Button>
-                    <Button as-child size="lg" variant="outline">
-                        <Link :href="register()">Join with email</Link>
-                    </Button>
+                    <div class="relative">
+                        <Button as-child size="lg" class="w-full">
+                            <a :href="socialRedirect.url('github')">
+                                <GithubIcon class="size-4" />
+                                Sign in with GitHub
+                            </a>
+                        </Button>
+                        <LastUsedBadge method="github" />
+                    </div>
+                    <div class="relative">
+                        <Button as-child size="lg" variant="outline" class="w-full">
+                            <a :href="socialRedirect.url('x')">
+                                <XIcon class="size-4" />
+                                Sign in with X
+                            </a>
+                        </Button>
+                        <LastUsedBadge method="x" />
+                    </div>
+                    <div class="relative">
+                        <Button as-child size="lg" variant="outline" class="w-full">
+                            <a :href="socialRedirect.url('bluesky')">
+                                <BlueskyIcon class="size-4" />
+                                Sign in with Bluesky
+                            </a>
+                        </Button>
+                        <LastUsedBadge method="bluesky" />
+                    </div>
+                    <div class="relative">
+                        <Button as-child size="lg" variant="outline" class="w-full">
+                            <Link :href="register()">Join with email</Link>
+                        </Button>
+                        <LastUsedBadge method="email" />
+                    </div>
                 </div>
             </section>
 

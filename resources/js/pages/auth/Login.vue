@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { Form, Head } from '@inertiajs/vue3'
     import InputError from '@/components/InputError.vue'
+    import LastUsedBadge from '@/components/LastUsedBadge.vue'
     import PasskeyVerify from '@/components/PasskeyVerify.vue'
     import PasswordInput from '@/components/PasswordInput.vue'
     import SocialLoginButtons from '@/components/SocialLoginButtons.vue'
@@ -83,10 +84,13 @@
                 </Label>
             </div>
 
-            <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing" data-test="login-button">
-                <Spinner v-if="processing" />
-                Log in
-            </Button>
+            <div class="relative mt-4">
+                <Button type="submit" class="w-full" :tabindex="4" :disabled="processing" data-test="login-button">
+                    <Spinner v-if="processing" />
+                    Log in
+                </Button>
+                <LastUsedBadge method="email" />
+            </div>
         </div>
 
         <SocialLoginButtons />

@@ -20,6 +20,7 @@ declare module '@inertiajs/core' {
             auth: Auth
             score: number
             pendingCount: number
+            lastLogin: string | null
             sidebarOpen: boolean
             [key: string]: unknown
         }
