@@ -3,8 +3,9 @@
     import { computed } from 'vue'
     import PendingInbox from '@/components/PendingInbox.vue'
     import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+    import { Button } from '@/components/ui/button'
     import { Card, CardContent } from '@/components/ui/card'
-    import { connections, dashboard } from '@/routes'
+    import { connections, dashboard, leaderboard } from '@/routes'
     import { edit as profileEdit } from '@/routes/profile'
 
     defineProps<{
@@ -15,7 +16,7 @@
 
     defineOptions({
         layout: {
-            breadcrumbs: [{ title: 'Dashboard', href: dashboard() }],
+            breadcrumbs: [{ title: 'My QR', href: dashboard() }],
         },
     })
 
@@ -24,7 +25,7 @@
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="My QR" />
 
     <div class="mx-auto flex h-full w-full max-w-2xl flex-1 flex-col gap-6 p-4">
         <Alert v-if="needsSocials" data-test="socials-nudge">
@@ -44,6 +45,9 @@
                     <p class="text-4xl font-bold" data-test="score">{{ score }}</p>
                     <p class="text-sm text-muted-foreground">{{ score === 1 ? 'connection' : 'connections' }}</p>
                 </Link>
+                <Button as-child variant="outline" size="sm">
+                    <Link :href="leaderboard()" prefetch>View leaderboard</Link>
+                </Button>
             </CardContent>
         </Card>
 

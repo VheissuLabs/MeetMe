@@ -19,7 +19,7 @@
 
     const mainNavItems: NavItem[] = [
         {
-            title: 'Dashboard',
+            title: 'My QR',
             href: dashboard(),
             icon: LayoutGrid,
         },

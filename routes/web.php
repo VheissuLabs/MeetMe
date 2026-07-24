@@ -30,7 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('my-qr', DashboardController::class)->name('dashboard');
     Route::inertia('scan', 'Scan')->name('scan');
     Route::get('connections', ConnectionsController::class)->name('connections');
 
