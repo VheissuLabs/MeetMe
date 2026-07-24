@@ -21,6 +21,11 @@ class UserResource extends Resource
         return false;
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
     public static function table(Table $table): Table
     {
         return UsersTable::configure($table);
