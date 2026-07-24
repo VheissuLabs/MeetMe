@@ -62,7 +62,7 @@
 <template>
     <Head :title="profile.name" />
 
-    <div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-4">
+    <div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-4 pt-8">
         <!-- Identity card -->
         <div class="flex flex-col gap-4">
             <div class="flex items-start gap-4">
