@@ -9,23 +9,39 @@
     const props = defineProps<{ conferenceName: string }>()
 
     const steps = [
-        { title: 'Scan.', body: 'Point your camera at their code.' },
+        {
+            title: 'Scan.',
+            body: 'Point your camera at their code.',
+            light: '/screenshots/my-qr.png',
+            dark: '/screenshots/my-qr-dark.png',
+        },
         {
             title: 'Ask.',
             body: `You get an AI-written icebreaker — "What's the most cursed production bug they've ever shipped?"`,
+            light: '/screenshots/answering.png',
+            dark: '/screenshots/answering-dark.png',
         },
-        { title: 'Score.', body: 'They confirm, you both get a point. The leaderboard is live at the venue.' },
+        {
+            title: 'Review.',
+            body: 'They rate how well you captured their answer.',
+            light: '/screenshots/rating.png',
+            dark: '/screenshots/rating-dark.png',
+        },
+        {
+            title: 'Score.',
+            body: 'The rating confirms it — you both get a point on the live leaderboard.',
+            light: '/screenshots/leaderboard.png',
+            dark: '/screenshots/leaderboard-dark.png',
+        },
     ]
-
-    const screens = ['Dashboard', 'Your question', 'Live leaderboard']
     const repo = 'https://github.com/VheissuLabs/MeetMe'
 </script>
 
 <template>
     <Head :title="`MeetMe — ${props.conferenceName}`" />
 
-    <div class="min-h-screen bg-background text-foreground">
-        <header class="mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
+    <div class="flex min-h-screen flex-col bg-background text-foreground">
+        <header class="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
             <span class="text-lg font-bold tracking-tight">MeetMe</span>
             <Link
                 :href="leaderboard()"
@@ -35,7 +51,7 @@
             </Link>
         </header>
 
-        <main class="mx-auto flex max-w-5xl flex-col gap-16 px-6 pb-16 sm:pb-24">
+        <main class="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center gap-16 px-6 py-16">
             <!-- Hero -->
             <section class="flex flex-col items-center gap-6 text-center">
                 <h1 class="text-4xl font-bold tracking-tight text-balance sm:text-6xl">
@@ -83,7 +99,7 @@
             </section>
 
             <!-- How it works -->
-            <section class="grid gap-8 sm:grid-cols-3">
+            <section class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 <div v-for="(step, index) in steps" :key="index" class="flex flex-col gap-3">
                     <div
                         class="flex size-9 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground"
@@ -93,12 +109,21 @@
                     <p>
                         <span class="font-semibold">{{ step.title }}</span> {{ step.body }}
                     </p>
-                    <div class="mt-1 aspect-[9/19] w-full max-w-[150px] rounded-2xl border-4 border-muted bg-muted/40">
-                        <div
-                            class="flex h-full items-center justify-center p-3 text-center text-xs text-muted-foreground"
-                        >
-                            {{ screens[index] }}
-                        </div>
+                    <div
+                        class="mt-auto aspect-[9/19] w-full max-w-[150px] overflow-hidden rounded-2xl border-4 border-muted bg-muted/40"
+                    >
+                        <img
+                            :src="step.light"
+                            :alt="step.title"
+                            class="h-full w-full object-cover object-top dark:hidden"
+                            loading="lazy"
+                        />
+                        <img
+                            :src="step.dark"
+                            :alt="step.title"
+                            class="hidden h-full w-full object-cover object-top dark:block"
+                            loading="lazy"
+                        />
                     </div>
                 </div>
             </section>

@@ -12,7 +12,15 @@ run it for your own event by editing `.env`, not code.
 
 ## Screenshots
 
-_Coming soon — captured from the real app (dashboard QR, question screen, live leaderboard)._
+Captured from the real app, on a phone — and they follow your GitHub light/dark theme.
+
+| Your QR code | Answer & rate an icebreaker | Live leaderboard |
+| :---: | :---: | :---: |
+| ![Your QR code](public/screenshots/my-qr.png#gh-light-mode-only) ![Your QR code](public/screenshots/my-qr-dark.png#gh-dark-mode-only) | ![Answering and rating](public/screenshots/rating.png#gh-light-mode-only) ![Answering and rating](public/screenshots/rating-dark.png#gh-dark-mode-only) | ![Live leaderboard](public/screenshots/leaderboard.png#gh-light-mode-only) ![Live leaderboard](public/screenshots/leaderboard-dark.png#gh-dark-mode-only) |
+
+| Your connections | A connection's profile | Scan a code |
+| :---: | :---: | :---: |
+| ![Connections](public/screenshots/connections.png#gh-light-mode-only) ![Connections](public/screenshots/connections-dark.png#gh-dark-mode-only) | ![Profile](public/screenshots/profile.png#gh-light-mode-only) ![Profile](public/screenshots/profile-dark.png#gh-dark-mode-only) | ![Scan](public/screenshots/scan.png#gh-light-mode-only) ![Scan](public/screenshots/scan-dark.png#gh-dark-mode-only) |
 
 ## How it works
 

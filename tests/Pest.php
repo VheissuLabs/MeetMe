@@ -18,6 +18,13 @@ pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
+// Browser (screenshot) tests boot the app but manage their own persistent
+// database, so they deliberately skip RefreshDatabase.
+pest()->extend(TestCase::class)->in('Browser');
+
+// Give the SPA a little longer to settle so screenshot capture isn't flaky.
+pest()->browser()->timeout(15000);
+
 /*
 |--------------------------------------------------------------------------
 | Expectations

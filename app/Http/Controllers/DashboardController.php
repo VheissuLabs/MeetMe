@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'meetUrl' => $meetUrl,
-            'qrSvg' => $qrCode->svg($meetUrl),
+            'qrSvg' => $qrCode->svg(config('meetme.demo_qr_url') ?: $meetUrl),
             'needsSocials' => blank($user->x_username) && blank($user->bluesky_handle),
             'achievements' => array_map(fn (Achievement $achievement): array => [
                 'key' => $achievement->value,

@@ -36,6 +36,7 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.9.3",
         "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-browser": "^4.3",
         "pestphp/pest-plugin-laravel": "^4.1"
     },
     "autoload": {
@@ -102,6 +103,9 @@
             "@php artisan wayfinder:generate --with-form",
             "@php artisan ide-helper:generate",
             "@ide:models"
+        ],
+        "screenshots": [
+            "@php artisan test --configuration phpunit.browser.xml"
         ],
         "ide:models": [
             "@php artisan ide-helper:models --write-mixin --no-interaction",
