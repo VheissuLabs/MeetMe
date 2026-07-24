@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Link } from '@inertiajs/vue3'
-    import { FolderGit2, LayoutGrid, ScanLine, Users } from '@lucide/vue'
+    import { FolderGit2, LayoutGrid, ScanLine, Trophy, Users } from '@lucide/vue'
     import AppLogo from '@/components/AppLogo.vue'
     import NavFooter from '@/components/NavFooter.vue'
     import NavMain from '@/components/NavMain.vue'
@@ -32,6 +32,11 @@
             title: 'Connections',
             href: '/connections',
             icon: Users,
+        },
+        {
+            title: 'Leaderboard',
+            href: '/leaderboard',
+            icon: Trophy,
         },
     ]
 

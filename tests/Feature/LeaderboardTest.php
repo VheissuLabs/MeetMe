@@ -80,3 +80,10 @@ it('never lets ratings influence the ranking', function () {
 
     expect(collect(leaderboard())->first()['name'])->toBe('LowRated');
 });
+
+it('renders inside the app shell for an authenticated visitor', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('leaderboard'))
+        ->assertOk()
+        ->assertInertia(fn (AssertableInertia $page) => $page->component('Leaderboard'));
+});
