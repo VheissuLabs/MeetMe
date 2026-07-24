@@ -18,7 +18,8 @@
         "laravel/socialite": "^5.29",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
-        "revolution/laravel-bluesky": "^1.2"
+        "revolution/laravel-bluesky": "^1.2",
+        "spatie/laravel-mobile-pass": "^1.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.4",
