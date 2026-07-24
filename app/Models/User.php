@@ -85,6 +85,12 @@ class User extends Authenticatable implements FilamentUser, PasskeyUser
         return $this->hasMany(SocialAccount::class);
     }
 
+    /** @return HasMany<UserAchievement, $this> */
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+
     /** @return HasOne<SocialAccount, $this> */
     public function githubAccount(): HasOne
     {
