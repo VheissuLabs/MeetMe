@@ -156,6 +156,10 @@ namespace App\Models{
  * @property string|null $x_username
  * @property bool $is_admin
  * @property string|null $linkedin_username
+ * @property string|null $headline
+ * @property string|null $job_title
+ * @property string|null $company
+ * @property bool $answers_visible
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserAchievement> $achievements
  * @property-read int|null $achievements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activitiesAsSubject
@@ -173,15 +177,19 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAnswersVisible($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatarSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatarUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBlueskyHandle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereHeadline($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereJobTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLinkedinUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)

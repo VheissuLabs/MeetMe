@@ -43,6 +43,9 @@ class BuildConnections
             'qr_token' => $person->qr_token,
             'name' => $person->name,
             'pronouns' => $person->pronouns,
+            'headline' => $person->headline,
+            'job_title' => $person->job_title,
+            'company' => $person->company,
             'avatar_url' => $person->avatar_url,
             'socials' => array_filter([
                 'github' => $person->githubAccount?->username

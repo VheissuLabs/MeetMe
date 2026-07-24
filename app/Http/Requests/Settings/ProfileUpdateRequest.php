@@ -19,10 +19,14 @@ class ProfileUpdateRequest extends FormRequest
         return [
             ...$this->profileRules($this->user()->id),
             'pronouns' => ['nullable', 'string', 'max:30'],
+            'headline' => ['nullable', 'string', 'max:120'],
+            'job_title' => ['nullable', 'string', 'max:80'],
+            'company' => ['nullable', 'string', 'max:80'],
             'x_username' => ['nullable', 'string', 'regex:/^[A-Za-z0-9_]{1,15}$/', 'required_if:avatar_source,x'],
             'bluesky_handle' => ['nullable', 'string', 'max:253', 'regex:/^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/i'],
             'linkedin_username' => ['nullable', 'string', 'regex:/^[A-Za-z0-9\-]{3,100}$/'],
             'email_visible' => ['boolean'],
+            'answers_visible' => ['boolean'],
             'avatar_source' => [
                 'sometimes',
                 Rule::enum(AvatarSource::class),
@@ -53,7 +57,11 @@ class ProfileUpdateRequest extends FormRequest
             'bluesky_handle' => blank($this->bluesky_handle) ? null : ltrim(strtolower((string) $this->bluesky_handle), '@'),
             'linkedin_username' => $this->normalizeLinkedinUsername($this->linkedin_username),
             'pronouns' => blank($this->pronouns) ? null : $this->pronouns,
+            'headline' => blank($this->headline) ? null : $this->headline,
+            'job_title' => blank($this->job_title) ? null : $this->job_title,
+            'company' => blank($this->company) ? null : $this->company,
             'email_visible' => $this->boolean('email_visible'),
+            'answers_visible' => $this->boolean('answers_visible'),
         ]);
     }
 

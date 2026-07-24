@@ -101,6 +101,49 @@
             </div>
 
             <div class="grid gap-2">
+                <Label for="headline">Headline</Label>
+                <Input
+                    id="headline"
+                    class="mt-1 block w-full"
+                    name="headline"
+                    :default-value="user.headline ?? ''"
+                    maxlength="120"
+                    placeholder="What you're into — e.g. Rust-curious, coffee-powered"
+                    @change="validate('headline')"
+                />
+                <InputError class="mt-2" :message="errors.headline" />
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div class="grid gap-2">
+                    <Label for="job_title">Role</Label>
+                    <Input
+                        id="job_title"
+                        class="mt-1 block w-full"
+                        name="job_title"
+                        :default-value="user.job_title ?? ''"
+                        maxlength="80"
+                        placeholder="e.g. Senior Engineer"
+                        @change="validate('job_title')"
+                    />
+                    <InputError class="mt-2" :message="errors.job_title" />
+                </div>
+                <div class="grid gap-2">
+                    <Label for="company">Company</Label>
+                    <Input
+                        id="company"
+                        class="mt-1 block w-full"
+                        name="company"
+                        :default-value="user.company ?? ''"
+                        maxlength="80"
+                        placeholder="e.g. Acme"
+                        @change="validate('company')"
+                    />
+                    <InputError class="mt-2" :message="errors.company" />
+                </div>
+            </div>
+
+            <div class="grid gap-2">
                 <Label for="x_username" class="flex items-center gap-1.5"><XIcon class="size-3.5" /> X username</Label>
                 <Input
                     id="x_username"
@@ -181,6 +224,22 @@
                     email.
                 </p>
                 <InputError class="mt-2" :message="errors.email_visible" />
+            </div>
+
+            <div class="grid gap-2">
+                <Label for="answers_visible" class="flex items-center space-x-3">
+                    <Checkbox
+                        id="answers_visible"
+                        name="answers_visible"
+                        value="1"
+                        :default-checked="user.answers_visible"
+                    />
+                    <span>Show my answered icebreakers on my profile</span>
+                </Label>
+                <p class="text-sm text-muted-foreground">
+                    On by default. Your answers appear as a feed on your profile. Turn off to keep them private.
+                </p>
+                <InputError class="mt-2" :message="errors.answers_visible" />
             </div>
 
             <div class="flex items-center gap-4">
