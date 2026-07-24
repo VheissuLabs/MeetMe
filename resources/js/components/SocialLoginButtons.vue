@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { BlueskyIcon, GithubIcon, XIcon } from '@/components/icons'
+    import LastUsedBadge from '@/components/LastUsedBadge.vue'
     import { Button } from '@/components/ui/button'
     import { redirect } from '@/routes/social'
 </script>
@@ -16,26 +17,35 @@
         </div>
 
         <div class="grid grid-cols-3 gap-2">
-            <Button variant="outline" as-child>
-                <a :href="redirect.url('github')" data-test="github-login-button">
-                    <GithubIcon class="size-4" />
-                    GitHub
-                </a>
-            </Button>
+            <div class="relative">
+                <Button variant="outline" as-child class="w-full">
+                    <a :href="redirect.url('github')" data-test="github-login-button">
+                        <GithubIcon class="size-4" />
+                        GitHub
+                    </a>
+                </Button>
+                <LastUsedBadge method="github" />
+            </div>
 
-            <Button variant="outline" as-child>
-                <a :href="redirect.url('x')" data-test="x-login-button">
-                    <XIcon class="size-4" />
-                    X
-                </a>
-            </Button>
+            <div class="relative">
+                <Button variant="outline" as-child class="w-full">
+                    <a :href="redirect.url('x')" data-test="x-login-button">
+                        <XIcon class="size-4" />
+                        X
+                    </a>
+                </Button>
+                <LastUsedBadge method="x" />
+            </div>
 
-            <Button variant="outline" as-child>
-                <a :href="redirect.url('bluesky')" data-test="bluesky-login-button">
-                    <BlueskyIcon class="size-4" />
-                    Bluesky
-                </a>
-            </Button>
+            <div class="relative">
+                <Button variant="outline" as-child class="w-full">
+                    <a :href="redirect.url('bluesky')" data-test="bluesky-login-button">
+                        <BlueskyIcon class="size-4" />
+                        Bluesky
+                    </a>
+                </Button>
+                <LastUsedBadge method="bluesky" />
+            </div>
         </div>
     </div>
 </template>

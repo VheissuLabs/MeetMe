@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
                 ->where('recipient_id', $request->user()->id)
                 ->where('status', MeetingStatus::Answered)
                 ->count(),
+            'lastLogin' => $request->cookie('last_login'),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
