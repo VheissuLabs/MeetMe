@@ -58,3 +58,12 @@ it('nudges users with no socials and stays quiet once they add one', function ()
         ->get(route('dashboard'))
         ->assertInertia(fn (AssertableInertia $page) => $page->where('needsSocials', false));
 });
+
+it('shares the avatar url so the sidebar can show a photo', function () {
+    $user = User::factory()->create(['avatar_url' => 'https://unavatar.io/github/octocat']);
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->where('auth.user.avatar_url', 'https://unavatar.io/github/octocat'));
+});
