@@ -33,6 +33,10 @@ class PurgeAnswersCommand extends Command
 
         $purged = Meeting::query()->whereNotNull('answer')->update(['answer' => null]);
 
+        if ($purged > 0) {
+            activity('admin')->log("Purged {$purged} recorded ".str('answer')->plural($purged));
+        }
+
         $this->info("Purged {$purged} recorded ".str('answer')->plural($purged).'.');
 
         return self::SUCCESS;
