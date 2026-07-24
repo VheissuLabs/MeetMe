@@ -8,17 +8,18 @@
     import { connections as connectionsRoute } from '@/routes'
 
     type Profile = {
-        meeting_id: string
         qr_token: string
         name: string
         pronouns: string | null
         avatar_url: string | null
         socials: { github?: string; x?: string; bluesky?: string; linkedin?: string }
         email?: string
-        question: string
-        answer: string | null
-        answerRedacted: boolean
-        rating: number | null
+        // Present only when you've had a confirmed meeting with them.
+        meeting_id?: string
+        question?: string
+        answer?: string | null
+        answerRedacted?: boolean
+        rating?: number | null
     }
 
     type Achievement = { key: string; name: string; icon: string }
@@ -93,7 +94,7 @@
                     </div>
                 </div>
             </CardHeader>
-            <CardContent class="space-y-1">
+            <CardContent v-if="profile.question" class="space-y-1">
                 <p class="text-sm font-medium">{{ profile.question }}</p>
                 <p
                     v-if="profile.answerRedacted"

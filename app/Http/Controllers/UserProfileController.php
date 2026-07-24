@@ -17,11 +17,14 @@ class UserProfileController extends Controller
     {
         $viewer = $request->user();
         $meeting = Meeting::between($viewer, $user);
-
-        abort_if($meeting === null || $meeting->status !== MeetingStatus::Confirmed, 404);
+        $hasMet = $meeting !== null && $meeting->status === MeetingStatus::Confirmed;
 
         return Inertia::render('UserProfile', [
-            'profile' => $buildConnections->forMeeting($meeting, $viewer),
+            // Anyone at the event can view a profile; the shared meeting (their
+            // icebreaker answer + rating) only shows once you've confirmed one.
+            'profile' => $hasMet
+                ? $buildConnections->forMeeting($meeting, $viewer)
+                : $buildConnections->person($user),
             'achievements' => $user->achievements()->orderBy('earned_at')->get()
                 ->map(fn (UserAchievement $earned): array => [
                     'key' => $earned->achievement->value,

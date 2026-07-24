@@ -6,7 +6,7 @@
     import AppLayout from '@/layouts/AppLayout.vue'
     import { leaderboard } from '@/routes'
 
-    type Ranking = { name: string; pronouns: string | null; avatar_url: string | null }
+    type Ranking = { name: string; pronouns: string | null; avatar_url: string | null; qr_token?: string }
 
     const props = defineProps<{
         conferenceName: string

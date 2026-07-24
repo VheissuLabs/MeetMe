@@ -35,10 +35,11 @@ class BuildConnections
     }
 
     /** @return array<string, mixed> */
-    private function connection(Meeting $meeting, User $person): array
+    public function person(User $person): array
     {
+        $person->loadMissing('githubAccount');
+
         return [
-            'meeting_id' => $meeting->id,
             'qr_token' => $person->qr_token,
             'name' => $person->name,
             'pronouns' => $person->pronouns,
@@ -54,6 +55,15 @@ class BuildConnections
                     : null,
             ]),
             ...$person->email_visible ? ['email' => $person->email] : [],
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function connection(Meeting $meeting, User $person): array
+    {
+        return [
+            ...$this->person($person),
+            'meeting_id' => $meeting->id,
             'question' => $meeting->question,
             'answer' => $meeting->answer,
             'answerRedacted' => $meeting->answer_redacted_at !== null,

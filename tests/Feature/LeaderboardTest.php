@@ -125,6 +125,21 @@ it('shares both leaderboards with the page', function () {
             ->has('conversationalists'));
 });
 
+it('exposes qr tokens to signed-in visitors so names link to profiles', function () {
+    Meeting::factory()->confirmed()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('leaderboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page->has('rankings.0.qr_token'));
+});
+
+it('hides qr tokens from the public leaderboard', function () {
+    Meeting::factory()->confirmed()->create();
+
+    $this->get(route('leaderboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page->missing('rankings.0.qr_token'));
+});
+
 it('renders inside the app shell for an authenticated visitor', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('leaderboard'))
