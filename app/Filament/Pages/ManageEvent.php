@@ -62,6 +62,8 @@ class ManageEvent extends Page implements HasSchemas
     {
         Event::current()->update($this->form->getState());
 
+        activity('admin')->log('Saved event settings');
+
         Notification::make()->title('Event settings saved.')->success()->send();
     }
 
@@ -78,7 +80,9 @@ class ManageEvent extends Page implements HasSchemas
                     Toggle::make('fresh')->label('Wipe existing questions and regenerate'),
                 ])
                 ->action(function (array $data): void {
-                    Artisan::call('meetme:generate-questions', $data['fresh'] ?? false ? ['--fresh' => true] : []);
+                    $fresh = $data['fresh'] ?? false;
+                    Artisan::call('meetme:generate-questions', $fresh ? ['--fresh' => true] : []);
+                    activity('admin')->log($fresh ? 'Regenerated icebreaker questions' : 'Generated icebreaker questions');
                     $this->notifyResult('Questions');
                 }),
             Action::make('sendRecaps')
@@ -88,6 +92,7 @@ class ManageEvent extends Page implements HasSchemas
                 ->modalDescription('Email every attendee with at least one confirmed meeting their recap.')
                 ->action(function (): void {
                     Artisan::call('meetme:send-recaps');
+                    activity('admin')->log('Sent recap emails');
                     $this->notifyResult('Recaps');
                 }),
             Action::make('purgeAnswers')

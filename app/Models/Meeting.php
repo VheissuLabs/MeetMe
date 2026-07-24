@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /** @mixin IdeHelperMeeting */
 #[UseFactory(MeetingFactory::class)]
@@ -20,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Meeting extends Model
 {
     /** @use HasFactory<MeetingFactory> */
-    use HasFactory, HasUlids;
+    use HasFactory, HasUlids, LogsActivity;
 
     /** @var list<string> */
     protected $guarded = [
@@ -28,6 +30,16 @@ class Meeting extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('meeting')
+            ->logOnly(['status', 'rating', 'initiator_id', 'recipient_id'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $event): string => "Meeting {$event}");
+    }
 
     /** @return array<string, string> */
     protected function casts(): array
