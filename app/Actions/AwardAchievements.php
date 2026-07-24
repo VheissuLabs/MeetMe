@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Enums\Achievement;
 use App\Events\AchievementUnlocked;
+use App\Models\Event;
 use App\Models\Meeting;
 use App\Models\User;
 
@@ -11,25 +12,29 @@ class AwardAchievements
 {
     public function for(User $user): void
     {
-        $earned = $user->achievements()->get()->pluck('achievement')->all();
         $score = $user->score();
 
         foreach (Achievement::cases() as $achievement) {
-            if (in_array($achievement, $earned, true)) {
-                continue;
+            if ($this->qualifies($user, $achievement, $score)) {
+                $this->grant($user, $achievement);
             }
-
-            if (! $this->qualifies($user, $achievement, $score)) {
-                continue;
-            }
-
-            $user->achievements()->create([
-                'achievement' => $achievement,
-                'earned_at' => now(),
-            ]);
-
-            AchievementUnlocked::dispatch($user->id, $achievement);
         }
+    }
+
+    public function grant(User $user, Achievement $achievement): bool
+    {
+        if ($user->achievements()->where('achievement', $achievement)->exists()) {
+            return false;
+        }
+
+        $user->achievements()->create([
+            'achievement' => $achievement,
+            'earned_at' => now(),
+        ]);
+
+        AchievementUnlocked::dispatch($user->id, $achievement);
+
+        return true;
     }
 
     private function qualifies(User $user, Achievement $achievement, int $score): bool
@@ -44,6 +49,8 @@ class AwardAchievements
                 ->where('initiator_id', $user->id)
                 ->where('rating', 5)
                 ->exists(),
+            Achievement::EarlyTester => ($startsAt = Event::current()->starts_at) !== null
+                && $user->created_at->lessThan($startsAt),
         };
     }
 }
