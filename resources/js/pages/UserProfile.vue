@@ -79,6 +79,26 @@
                         </span>
                     </h1>
                     <p v-if="roleLine" class="text-sm text-muted-foreground">{{ roleLine }}</p>
+
+                    <div class="mt-2 flex items-center gap-4">
+                        <a
+                            v-for="social in socialLinks"
+                            v-show="profile.socials[social.key]"
+                            :key="social.key"
+                            :href="profile.socials[social.key]"
+                            target="_blank"
+                            rel="noopener"
+                            :aria-label="social.label"
+                        >
+                            <component
+                                :is="social.icon"
+                                class="size-5 text-muted-foreground transition-colors hover:text-foreground"
+                            />
+                        </a>
+                        <a v-if="profile.email" :href="`mailto:${profile.email}`" aria-label="Email">
+                            <Mail class="size-5 text-muted-foreground transition-colors hover:text-foreground" />
+                        </a>
+                    </div>
                 </div>
 
                 <Button v-if="isSelf" as-child variant="outline" size="sm" class="shrink-0">
@@ -87,26 +107,6 @@
             </div>
 
             <p v-if="profile.headline" class="text-pretty">{{ profile.headline }}</p>
-
-            <div class="flex items-center gap-4">
-                <a
-                    v-for="social in socialLinks"
-                    v-show="profile.socials[social.key]"
-                    :key="social.key"
-                    :href="profile.socials[social.key]"
-                    target="_blank"
-                    rel="noopener"
-                    :aria-label="social.label"
-                >
-                    <component
-                        :is="social.icon"
-                        class="size-5 text-muted-foreground transition-colors hover:text-foreground"
-                    />
-                </a>
-                <a v-if="profile.email" :href="`mailto:${profile.email}`" aria-label="Email">
-                    <Mail class="size-5 text-muted-foreground transition-colors hover:text-foreground" />
-                </a>
-            </div>
 
             <TooltipProvider v-if="achievements.length" :delay-duration="0">
                 <div class="flex flex-wrap gap-2">
