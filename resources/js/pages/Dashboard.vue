@@ -49,7 +49,7 @@
             <CardContent class="flex flex-col items-center gap-4 p-6">
                 <p class="text-sm text-muted-foreground">Let someone scan this to meet you</p>
                 <!-- eslint-disable-next-line vue/no-v-html -- server-generated QR SVG, no user input -->
-                <div class="w-full max-w-[320px] [&_svg]:h-auto [&_svg]:w-full" v-html="qrSvg" />
+                <div class="w-full max-w-[320px] [&_svg]:h-auto [&_svg]:w-full" data-test="qr-code" v-html="qrSvg" />
                 <Link :href="connections()" prefetch class="text-center transition-opacity hover:opacity-70">
                     <p class="text-4xl font-bold" data-test="score">{{ score }}</p>
                     <p class="text-sm text-muted-foreground">{{ score === 1 ? 'connection' : 'connections' }}</p>

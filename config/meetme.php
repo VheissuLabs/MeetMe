@@ -70,6 +70,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Demo QR override
+    |--------------------------------------------------------------------------
+    |
+    | When set, the "My QR" page encodes this URL instead of the user's real
+    | meet link. Only used to generate marketing screenshots — leave unset in
+    | production so the QR points at the real deep-link.
+    |
+    */
+
+    'demo_qr_url' => env('MEETME_DEMO_QR_URL'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Wallet Pass (feature flag)
     |--------------------------------------------------------------------------
     |

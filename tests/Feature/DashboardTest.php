@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\AwardAchievements;
+use App\Actions\GenerateQrCode;
 use App\Enums\Achievement;
 use App\Models\Meeting;
 use App\Models\User;
@@ -59,6 +60,25 @@ it('nudges users with no socials and stays quiet once they add one', function ()
     $this->actingAs($social)
         ->get(route('dashboard'))
         ->assertInertia(fn (AssertableInertia $page) => $page->where('needsSocials', false));
+});
+
+it('encodes the demo QR url when one is configured', function () {
+    config(['meetme.demo_qr_url' => 'https://example.com/rickroll']);
+    $user = User::factory()->create();
+    $expected = app(GenerateQrCode::class)->svg('https://example.com/rickroll');
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page->where('qrSvg', $expected));
+});
+
+it('encodes the real meet link when no demo url is set', function () {
+    $user = User::factory()->create();
+    $expected = app(GenerateQrCode::class)->svg(url('/meet/'.$user->qr_token));
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page->where('qrSvg', $expected));
 });
 
 it('shares achievements with their earned flags', function () {

@@ -17,7 +17,11 @@
         { title: 'Score.', body: 'They confirm, you both get a point. The leaderboard is live at the venue.' },
     ]
 
-    const screens = ['Dashboard', 'Your question', 'Live leaderboard']
+    const screens = [
+        { label: 'Your QR code', light: '/screenshots/my-qr.png', dark: '/screenshots/my-qr-dark.png' },
+        { label: 'Your icebreaker', light: '/screenshots/answering.png', dark: '/screenshots/answering-dark.png' },
+        { label: 'Live leaderboard', light: '/screenshots/leaderboard.png', dark: '/screenshots/leaderboard-dark.png' },
+    ]
     const repo = 'https://github.com/VheissuLabs/MeetMe'
 </script>
 
@@ -93,12 +97,21 @@
                     <p>
                         <span class="font-semibold">{{ step.title }}</span> {{ step.body }}
                     </p>
-                    <div class="mt-1 aspect-[9/19] w-full max-w-[150px] rounded-2xl border-4 border-muted bg-muted/40">
-                        <div
-                            class="flex h-full items-center justify-center p-3 text-center text-xs text-muted-foreground"
-                        >
-                            {{ screens[index] }}
-                        </div>
+                    <div
+                        class="mt-auto aspect-[9/19] w-full max-w-[150px] overflow-hidden rounded-2xl border-4 border-muted bg-muted/40"
+                    >
+                        <img
+                            :src="screens[index].light"
+                            :alt="screens[index].label"
+                            class="h-full w-full object-cover object-top dark:hidden"
+                            loading="lazy"
+                        />
+                        <img
+                            :src="screens[index].dark"
+                            :alt="screens[index].label"
+                            class="hidden h-full w-full object-cover object-top dark:block"
+                            loading="lazy"
+                        />
                     </div>
                 </div>
             </section>
