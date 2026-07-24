@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Achievement;
 use App\Enums\MeetingStatus;
 use App\Filament\Resources\Meetings\MeetingResource;
 use App\Filament\Resources\Meetings\Pages\ListMeetings;
@@ -7,6 +8,7 @@ use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\UserResource;
 use App\Models\Meeting;
 use App\Models\User;
+use Filament\Actions\Testing\TestAction;
 use Illuminate\Support\Carbon;
 use Livewire\Livewire;
 
@@ -79,6 +81,18 @@ it('shows meeting times in 12-hour format', function () {
 
     Livewire::test(ListMeetings::class)
         ->assertTableColumnFormattedStateSet('created_at', 'Jul 24, 2026 2:30 PM', $meeting);
+});
+
+it('lets an admin grant an achievement to a user', function () {
+    $user = User::factory()->create();
+
+    Livewire::test(ListUsers::class)
+        ->callAction(TestAction::make('grantAchievement')->table($user), data: [
+            'achievement' => Achievement::EarlyTester->value,
+        ])
+        ->assertHasNoActionErrors();
+
+    expect($user->achievements()->where('achievement', Achievement::EarlyTester)->exists())->toBeTrue();
 });
 
 it('forbids non-admins from the resources', function () {
