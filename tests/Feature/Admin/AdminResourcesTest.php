@@ -7,6 +7,7 @@ use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\UserResource;
 use App\Models\Meeting;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Livewire\Livewire;
 
 beforeEach(fn () => $this->actingAs(User::factory()->admin()->create()));
@@ -55,6 +56,14 @@ it('lists meetings and filters by status', function () {
 
 it('cannot create meetings from the panel', function () {
     expect(MeetingResource::canCreate())->toBeFalse();
+});
+
+it('shows meeting times in 12-hour format', function () {
+    $meeting = Meeting::factory()->confirmed()->create();
+    $meeting->forceFill(['created_at' => Carbon::parse('2026-07-24 14:30:00')])->save();
+
+    Livewire::test(ListMeetings::class)
+        ->assertTableColumnFormattedStateSet('created_at', 'Jul 24, 2026 2:30 PM', $meeting);
 });
 
 it('forbids non-admins from the resources', function () {

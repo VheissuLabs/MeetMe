@@ -30,7 +30,7 @@ class UsersTable
                     ->label('Admin'),
                 TextColumn::make('created_at')
                     ->label('Joined')
-                    ->dateTime()
+                    ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->toggleable(),
             ])
