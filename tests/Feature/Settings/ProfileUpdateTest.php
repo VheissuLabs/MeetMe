@@ -84,6 +84,26 @@ test('correct password must be provided to delete account', function () {
     expect($user->fresh())->not->toBeNull();
 });
 
+test('an oauth user without a password can delete their account', function () {
+    $user = User::factory()->withoutPassword()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->delete(route('profile.destroy'));
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('home'));
+
+    $this->assertGuest();
+    expect($user->fresh())->toBeNull();
+});
+
+test('has_password flag reflects whether the account has a password', function () {
+    expect(User::factory()->create()->has_password)->toBeTrue()
+        ->and(User::factory()->withoutPassword()->create()->has_password)->toBeFalse();
+});
+
 test('meetme profile fields can be updated', function () {
     $user = User::factory()->create();
 

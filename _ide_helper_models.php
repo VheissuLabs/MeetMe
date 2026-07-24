@@ -150,6 +150,7 @@ namespace App\Models{
  * @property string|null $x_username
  * @property bool $is_admin
  * @property-read \App\Models\SocialAccount|null $githubAccount
+ * @property-read bool $has_password
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Passkeys\Passkey> $passkeys
