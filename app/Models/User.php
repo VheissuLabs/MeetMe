@@ -6,6 +6,8 @@ use App\Enums\AvatarSource;
 use App\Enums\SocialProvider;
 use App\Observers\UserObserver;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +22,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 /** @mixin IdeHelperUser */
 #[UseFactory(UserFactory::class)]
 #[ObservedBy(UserObserver::class)]
-class User extends Authenticatable implements PasskeyUser
+class User extends Authenticatable implements FilamentUser, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
@@ -47,6 +49,7 @@ class User extends Authenticatable implements PasskeyUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'is_admin' => 'boolean',
             'avatar_source' => AvatarSource::class,
             'email_visible' => 'boolean',
         ];
@@ -84,5 +87,10 @@ class User extends Authenticatable implements PasskeyUser
             ->avg('rating');
 
         return $average === null ? null : round((float) $average, 1);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return (bool) $this->is_admin;
     }
 }

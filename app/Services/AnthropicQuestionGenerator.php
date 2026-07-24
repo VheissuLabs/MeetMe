@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Ai\Agents\IcebreakerQuestionWriter;
+use App\Models\Event;
 use Laravel\Ai\Responses\StructuredAgentResponse;
 
 class AnthropicQuestionGenerator implements QuestionGenerator
@@ -12,7 +13,7 @@ class AnthropicQuestionGenerator implements QuestionGenerator
     /** @return list<string> */
     public function generate(int $count): array
     {
-        $conference = config('meetme.conference_name');
+        $conference = Event::current()->name;
 
         $response = $this->writer->prompt(
             "Write exactly {$count} icebreaker questions for attendees of {$conference}."

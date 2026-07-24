@@ -13,6 +13,29 @@
 
 namespace App\Models{
 /**
+ * @property int $id
+ * @property string $name
+ * @property \Carbon\CarbonImmutable|null $starts_at
+ * @property \Carbon\CarbonImmutable|null $ends_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereEndsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereStartsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	#[\AllowDynamicProperties]
+	class IdeHelperEvent {}
+}
+
+namespace App\Models{
+/**
  * @property string $id
  * @property string $question
  * @property \Carbon\CarbonImmutable|null $created_at
@@ -125,6 +148,7 @@ namespace App\Models{
  * @property string|null $pronouns
  * @property bool $email_visible
  * @property string|null $x_username
+ * @property bool $is_admin
  * @property-read \App\Models\SocialAccount|null $githubAccount
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
@@ -145,6 +169,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVisible($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePronouns($value)
