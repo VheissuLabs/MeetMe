@@ -8,10 +8,19 @@
     import { connections, dashboard, leaderboard } from '@/routes'
     import { edit as profileEdit } from '@/routes/profile'
 
+    type Achievement = {
+        key: string
+        name: string
+        description: string
+        icon: string
+        earned: boolean
+    }
+
     defineProps<{
         meetUrl: string
         qrSvg: string
         needsSocials: boolean
+        achievements: Achievement[]
     }>()
 
     defineOptions({
@@ -48,6 +57,26 @@
                 <Button as-child variant="outline" size="sm">
                     <Link :href="leaderboard()" prefetch>View leaderboard</Link>
                 </Button>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardContent class="p-6">
+                <p class="mb-4 text-sm font-medium">Achievements</p>
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    <div
+                        v-for="achievement in achievements"
+                        :key="achievement.key"
+                        class="flex flex-col items-center gap-1 rounded-lg border p-3 text-center transition-opacity"
+                        :class="achievement.earned ? '' : 'opacity-40 grayscale'"
+                        :title="achievement.description"
+                        :data-test="`achievement-${achievement.key}`"
+                        :data-earned="achievement.earned"
+                    >
+                        <span class="text-3xl">{{ achievement.icon }}</span>
+                        <span class="text-xs font-medium">{{ achievement.name }}</span>
+                    </div>
+                </div>
             </CardContent>
         </Card>
 

@@ -42,6 +42,8 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Meeting> $meetings
+ * @property-read int|null $meetings_count
  * @method static \Database\Factories\IcebreakerQuestionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion newQuery()
@@ -154,6 +156,8 @@ namespace App\Models{
  * @property string|null $x_username
  * @property bool $is_admin
  * @property string|null $linkedin_username
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserAchievement> $achievements
+ * @property-read int|null $achievements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
  * @property-read \App\Models\SocialAccount|null $githubAccount
@@ -193,5 +197,30 @@ namespace App\Models{
  */
 	#[\AllowDynamicProperties]
 	class IdeHelperUser {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property \App\Enums\Achievement $achievement
+ * @property \Carbon\CarbonImmutable $earned_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\UserAchievementFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereAchievement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereEarnedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereUserId($value)
+ * @mixin \Eloquent
+ */
+	#[\AllowDynamicProperties]
+	class IdeHelperUserAchievement {}
 }
 

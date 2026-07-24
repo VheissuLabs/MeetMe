@@ -1,5 +1,7 @@
 <?php
 
+use App\Actions\AwardAchievements;
+use App\Enums\Achievement;
 use App\Models\Meeting;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
@@ -57,6 +59,20 @@ it('nudges users with no socials and stays quiet once they add one', function ()
     $this->actingAs($social)
         ->get(route('dashboard'))
         ->assertInertia(fn (AssertableInertia $page) => $page->where('needsSocials', false));
+});
+
+it('shares achievements with their earned flags', function () {
+    $user = User::factory()->create();
+    Meeting::factory()->confirmed()->create(['recipient_id' => $user->id]);
+    app(AwardAchievements::class)->for($user);
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->has('achievements', 5)
+            ->where('achievements.0.key', Achievement::FirstConnection->value)
+            ->where('achievements.0.earned', true)
+            ->where('achievements.2.earned', false));
 });
 
 it('shares the avatar url so the sidebar can show a photo', function () {

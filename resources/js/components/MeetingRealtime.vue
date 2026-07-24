@@ -39,6 +39,16 @@
             }
         },
     )
+
+    useEcho<{ key: string; name: string; description: string; icon: string }>(
+        channel.value,
+        '.AchievementUnlocked',
+        (payload) => {
+            toast.success(`${payload.icon} Achievement unlocked: ${payload.name}`, {
+                description: payload.description,
+            })
+        },
+    )
 </script>
 
 <template>

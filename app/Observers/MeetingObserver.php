@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Actions\AwardAchievements;
 use App\Enums\MeetingStatus;
 use App\Events\LeaderboardChanged;
 use App\Events\MeetingAwaitingConfirmation;
@@ -10,6 +11,8 @@ use App\Models\Meeting;
 
 class MeetingObserver
 {
+    public function __construct(private AwardAchievements $awardAchievements) {}
+
     public function creating(Meeting $meeting): void
     {
         $meeting->pair_key ??= Meeting::pairKeyFor($meeting->initiator, $meeting->recipient);
@@ -29,6 +32,9 @@ class MeetingObserver
 
         if ($meeting->status === MeetingStatus::Confirmed) {
             LeaderboardChanged::dispatch();
+
+            $this->awardAchievements->for($meeting->initiator);
+            $this->awardAchievements->for($meeting->recipient);
         }
     }
 }
