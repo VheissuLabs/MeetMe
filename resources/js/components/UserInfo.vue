@@ -15,13 +15,13 @@
 
     const { getInitials } = useInitials()
 
-    // Compute whether we should show the avatar image
-    const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '')
+    // Prefer the resolved profile photo (avatar_url); fall back to initials.
+    const avatarUrl = computed(() => props.user.avatar_url || props.user.avatar || '')
 </script>
 
 <template>
     <Avatar class="h-8 w-8 overflow-hidden rounded-lg">
-        <AvatarImage v-if="showAvatar" :src="user.avatar!" :alt="user.name" />
+        <AvatarImage v-if="avatarUrl" :src="avatarUrl" :alt="user.name" />
         <AvatarFallback class="rounded-lg text-black dark:text-white">
             {{ getInitials(user.name) }}
         </AvatarFallback>
