@@ -12,6 +12,7 @@ use App\Http\Controllers\MeetingAnswerController;
 use App\Http\Controllers\MeetingAnswerRedactionController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MeetingResolveController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('my-qr', DashboardController::class)->name('dashboard');
     Route::inertia('scan', 'Scan')->name('scan');
     Route::get('connections', ConnectionsController::class)->name('connections');
+    Route::get('users/{user:qr_token}', UserProfileController::class)->name('users.show');
 
     Route::post('meetings', [MeetingController::class, 'store'])
         ->middleware('throttle:meetme-scan')

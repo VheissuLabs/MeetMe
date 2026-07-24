@@ -4,7 +4,7 @@
     import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController'
     import DeleteUser from '@/components/DeleteUser.vue'
     import Heading from '@/components/Heading.vue'
-    import { BlueskyIcon, XIcon } from '@/components/icons'
+    import { BlueskyIcon, LinkedInIcon, XIcon } from '@/components/icons'
     import InputError from '@/components/InputError.vue'
     import { Button } from '@/components/ui/button'
     import { Checkbox } from '@/components/ui/checkbox'
@@ -126,6 +126,21 @@
                     @change="validate('bluesky_handle')"
                 />
                 <InputError class="mt-2" :message="errors.bluesky_handle" />
+            </div>
+
+            <div class="grid gap-2">
+                <Label for="linkedin_username" class="flex items-center gap-1.5"
+                    ><LinkedInIcon class="size-3.5" /> LinkedIn</Label
+                >
+                <Input
+                    id="linkedin_username"
+                    class="mt-1 block w-full"
+                    name="linkedin_username"
+                    :default-value="user.linkedin_username ?? ''"
+                    placeholder="linkedin.com/in/your-name"
+                    @change="validate('linkedin_username')"
+                />
+                <InputError class="mt-2" :message="errors.linkedin_username" />
             </div>
 
             <div class="grid gap-2">
