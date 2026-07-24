@@ -11,6 +11,12 @@ function leaderboard(): array
     return app(GetLeaderboard::class)->get();
 }
 
+/** @return array<int, array<string, mixed>> */
+function conversationalists(): array
+{
+    return app(GetLeaderboard::class)->conversationalists();
+}
+
 it('loads without authentication', function () {
     $this->get(route('leaderboard'))
         ->assertOk()
@@ -79,6 +85,44 @@ it('never lets ratings influence the ranking', function () {
     Meeting::factory()->confirmed()->create(['initiator_id' => $highRated->id, 'rating' => 5]);
 
     expect(collect(leaderboard())->first()['name'])->toBe('LowRated');
+});
+
+it('ranks conversationalists by their average answer rating', function () {
+    $ace = User::factory()->create(['name' => 'Ace']);
+    $mid = User::factory()->create(['name' => 'Mid']);
+
+    Meeting::factory()->confirmed()->create(['initiator_id' => $ace->id, 'rating' => 5]);
+    Meeting::factory()->confirmed()->create(['initiator_id' => $ace->id, 'rating' => 5]);
+    Meeting::factory()->confirmed()->create(['initiator_id' => $mid->id, 'rating' => 3]);
+
+    $rows = collect(conversationalists());
+
+    expect($rows->first()['name'])->toBe('Ace')
+        ->and($rows->firstWhere('name', 'Ace')['average'])->toBe(5.0)
+        ->and($rows->firstWhere('name', 'Ace')['rating_count'])->toBe(2)
+        ->and($rows->firstWhere('name', 'Mid')['average'])->toBe(3.0);
+});
+
+it('counts only the rated answers you gave as the initiator', function () {
+    $answerer = User::factory()->create(['name' => 'Answerer']);
+    // They are the recipient here — the rating is on the other person's answer.
+    Meeting::factory()->confirmed()->create(['recipient_id' => $answerer->id, 'rating' => 5]);
+
+    expect(collect(conversationalists())->pluck('name'))->not->toContain('Answerer');
+});
+
+it('excludes confirmed meetings that were never rated', function () {
+    $user = User::factory()->create(['name' => 'Unrated']);
+    Meeting::factory()->confirmed()->create(['initiator_id' => $user->id, 'rating' => null]);
+
+    expect(collect(conversationalists())->pluck('name'))->not->toContain('Unrated');
+});
+
+it('shares both leaderboards with the page', function () {
+    $this->get(route('leaderboard'))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->has('rankings')
+            ->has('conversationalists'));
 });
 
 it('renders inside the app shell for an authenticated visitor', function () {

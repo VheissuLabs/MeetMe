@@ -9,6 +9,7 @@ enum Achievement: string
     case SocialButterfly = 'social-butterfly';
     case SuperConnector = 'super-connector';
     case FiveStar = 'five-star';
+    case EarlyTester = 'early-tester';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum Achievement: string
             self::SocialButterfly => 'Social Butterfly',
             self::SuperConnector => 'Super Connector',
             self::FiveStar => 'Five Star',
+            self::EarlyTester => 'Early Tester',
         };
     }
 
@@ -29,6 +31,7 @@ enum Achievement: string
             self::SocialButterfly => 'Reached 10 connections.',
             self::SuperConnector => 'Reached 25 connections.',
             self::FiveStar => 'One of your icebreaker answers earned a 5-star rating.',
+            self::EarlyTester => 'Joined before the event began — thanks for helping test!',
         };
     }
 
@@ -40,6 +43,7 @@ enum Achievement: string
             self::SocialButterfly => '🦋',
             self::SuperConnector => '🌟',
             self::FiveStar => '⭐',
+            self::EarlyTester => '🧪',
         };
     }
 }

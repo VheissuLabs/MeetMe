@@ -14,6 +14,7 @@ class LeaderboardController extends Controller
         return Inertia::render('Leaderboard', [
             'conferenceName' => Event::current()->name,
             'rankings' => $leaderboard->get(),
+            'conversationalists' => $leaderboard->conversationalists(),
         ]);
     }
 }
