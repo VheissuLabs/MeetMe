@@ -132,7 +132,7 @@ namespace App\Models{
 /**
  * @property int $id
  * @property string $name
- * @property string $email
+ * @property string|null $email
  * @property \Carbon\CarbonImmutable|null $email_verified_at
  * @property string|null $password
  * @property string|null $remember_token

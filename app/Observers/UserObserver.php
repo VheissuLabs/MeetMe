@@ -17,7 +17,7 @@ class UserObserver
 
     public function saving(User $user): void
     {
-        if ($user->isDirty(['avatar_source', 'x_username', 'email']) || blank($user->avatar_url)) {
+        if ($user->isDirty(['avatar_source', 'x_username', 'bluesky_handle', 'email']) || blank($user->avatar_url)) {
             $user->avatar_url = $this->resolveAvatarUrl->handle($user) ?? $user->avatar_url;
         }
     }

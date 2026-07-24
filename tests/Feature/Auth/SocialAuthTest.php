@@ -78,14 +78,13 @@ test('a github login links to an existing user by email', function () {
         ->and(SocialAccount::query()->count())->toBe(1);
 });
 
-test('a github account without an email cannot sign in', function () {
+test('a github account without an email creates an emailless user', function () {
     Socialite::fake('github', fakeGithubUser(['email' => null]));
 
-    $response = $this->get(route('social.callback', 'github'));
+    $this->get(route('social.callback', 'github'))->assertRedirect(route('dashboard', absolute: false));
 
-    $response->assertRedirect(route('login', absolute: false));
-    $this->assertGuest();
-    expect(User::query()->count())->toBe(0);
+    $this->assertAuthenticated();
+    expect(User::query()->sole()->email)->toBeNull();
 });
 
 test('the login and register pages expose the github button', function () {
