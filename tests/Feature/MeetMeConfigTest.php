@@ -20,3 +20,7 @@ it('has sane defaults without any env configuration', function () {
         ->and(config('meetme.scan_rate_limit'))->toBe(10)
         ->and(config('meetme.purge_answers_after_days'))->toBeNull();
 });
+
+it('keeps the wallet pass feature off by default', function () {
+    expect(config('meetme.wallet_pass_enabled'))->toBeFalse();
+});

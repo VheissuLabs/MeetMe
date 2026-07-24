@@ -70,6 +70,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Wallet Pass (feature flag)
+    |--------------------------------------------------------------------------
+    |
+    | Add-to-Apple/Google-Wallet passes carrying a user's QR. Off until the
+    | platform credentials in config/mobile-pass.php are in place — see the
+    | MOBILE_PASS_* keys in .env.example.
+    |
+    */
+
+    'wallet_pass_enabled' => (bool) env('MEETME_WALLET_PASS_ENABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Answer Retention
     |--------------------------------------------------------------------------
     |
