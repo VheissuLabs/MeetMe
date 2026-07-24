@@ -40,6 +40,8 @@ namespace App\Models{
  * @property string $question
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  * @method static \Database\Factories\IcebreakerQuestionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|IcebreakerQuestion newQuery()
@@ -70,6 +72,8 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $resolved_at
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  * @property-read \App\Models\IcebreakerQuestion|null $icebreakerQuestion
  * @property-read \App\Models\User $initiator
  * @property-read \App\Models\User $recipient
@@ -149,6 +153,8 @@ namespace App\Models{
  * @property bool $email_visible
  * @property string|null $x_username
  * @property bool $is_admin
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  * @property-read \App\Models\SocialAccount|null $githubAccount
  * @property-read bool $has_password
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications

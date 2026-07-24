@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Listeners\RememberLoginMethod;
+use App\Observers\ActivityObserver;
 use App\Services\AnthropicQuestionGenerator;
 use App\Services\QuestionGenerator;
 use Carbon\CarbonImmutable;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Spatie\Activitylog\Models\Activity;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
             ->by((string) $request->user()?->id ?: $request->ip()));
 
         Event::listen(Login::class, RememberLoginMethod::class);
+
+        Activity::observe(ActivityObserver::class);
     }
 
     protected function configureDefaults(): void
