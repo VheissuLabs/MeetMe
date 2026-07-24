@@ -9,6 +9,7 @@ export type User = {
     pronouns: string | null
     x_username: string | null
     bluesky_handle: string | null
+    linkedin_username: string | null
     avatar_url: string | null
     avatar_source: 'github' | 'x' | 'gravatar'
     email_visible: boolean
