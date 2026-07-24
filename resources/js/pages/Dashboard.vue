@@ -5,6 +5,7 @@
     import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
     import { Button } from '@/components/ui/button'
     import { Card, CardContent } from '@/components/ui/card'
+    import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
     import { connections, dashboard, leaderboard } from '@/routes'
     import { edit as profileEdit } from '@/routes/profile'
     import { show as userProfile } from '@/routes/users'
@@ -70,20 +71,26 @@
         <Card>
             <CardContent class="p-6">
                 <p class="mb-4 text-sm font-medium">Achievements</p>
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    <div
-                        v-for="achievement in achievements"
-                        :key="achievement.key"
-                        class="flex flex-col items-center gap-1 rounded-lg border p-3 text-center transition-opacity"
-                        :class="achievement.earned ? '' : 'opacity-40 grayscale'"
-                        :title="achievement.description"
-                        :data-test="`achievement-${achievement.key}`"
-                        :data-earned="achievement.earned"
-                    >
-                        <span class="text-3xl">{{ achievement.icon }}</span>
-                        <span class="text-xs font-medium">{{ achievement.name }}</span>
+                <TooltipProvider :delay-duration="0">
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                        <Tooltip v-for="achievement in achievements" :key="achievement.key">
+                            <TooltipTrigger as-child>
+                                <div
+                                    class="flex flex-col items-center gap-1 rounded-lg border p-3 text-center transition-opacity"
+                                    :class="achievement.earned ? '' : 'opacity-40 grayscale'"
+                                    :data-test="`achievement-${achievement.key}`"
+                                    :data-earned="achievement.earned"
+                                >
+                                    <span class="text-3xl">{{ achievement.icon }}</span>
+                                    <span class="text-xs font-medium">{{ achievement.name }}</span>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{{ achievement.description }}</p>
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
-                </div>
+                </TooltipProvider>
             </CardContent>
         </Card>
 

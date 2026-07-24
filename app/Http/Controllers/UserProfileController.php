@@ -41,6 +41,7 @@ class UserProfileController extends Controller
                 ->map(fn (UserAchievement $earned): array => [
                     'key' => $earned->achievement->value,
                     'name' => $earned->achievement->label(),
+                    'description' => $earned->achievement->description(),
                     'icon' => $earned->achievement->icon(),
                 ])
                 ->all(),

@@ -5,6 +5,7 @@
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { Button } from '@/components/ui/button'
     import { Card, CardContent } from '@/components/ui/card'
+    import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
     import { useInitials } from '@/composables/useInitials'
     import { connections as connectionsRoute } from '@/routes'
     import { edit as profileEdit } from '@/routes/profile'
@@ -34,7 +35,7 @@
         isSelf: boolean
         stats: { connections: number; averageRating: number | null }
         feed: { data: FeedItem[] }
-        achievements: Array<{ key: string; name: string; icon: string }>
+        achievements: Array<{ key: string; name: string; description: string; icon: string }>
     }>()
 
     defineOptions({
@@ -108,18 +109,24 @@
                     </a>
                 </div>
 
-                <div v-if="achievements.length" class="flex flex-wrap justify-center gap-2">
-                    <span
-                        v-for="achievement in achievements"
-                        :key="achievement.key"
-                        class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
-                        :title="achievement.name"
-                        :data-test="`achievement-${achievement.key}`"
-                    >
-                        <span>{{ achievement.icon }}</span>
-                        <span>{{ achievement.name }}</span>
-                    </span>
-                </div>
+                <TooltipProvider v-if="achievements.length" :delay-duration="0">
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <Tooltip v-for="achievement in achievements" :key="achievement.key">
+                            <TooltipTrigger as-child>
+                                <span
+                                    class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
+                                    :data-test="`achievement-${achievement.key}`"
+                                >
+                                    <span>{{ achievement.icon }}</span>
+                                    <span>{{ achievement.name }}</span>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{{ achievement.description }}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
+                </TooltipProvider>
 
                 <p class="text-sm text-muted-foreground">
                     <span class="font-semibold text-foreground">{{ stats.connections }}</span>
