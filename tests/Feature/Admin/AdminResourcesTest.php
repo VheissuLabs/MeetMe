@@ -65,6 +65,14 @@ it('cannot create meetings from the panel', function () {
     expect(MeetingResource::canCreate())->toBeFalse();
 });
 
+it('badges the confirmed-connection count', function () {
+    Meeting::factory()->confirmed()->count(3)->create();
+    Meeting::factory()->create(); // pending, excluded
+
+    expect(MeetingResource::getNavigationBadge())->toBe('3')
+        ->and(MeetingResource::getNavigationBadgeColor())->toBe('success');
+});
+
 it('shows meeting times in 12-hour format', function () {
     $meeting = Meeting::factory()->confirmed()->create();
     $meeting->forceFill(['created_at' => Carbon::parse('2026-07-24 14:30:00')])->save();
