@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 
 /** @mixin IdeHelperEvent */
 class Event extends Model
@@ -24,18 +23,12 @@ class Event extends Model
         ];
     }
 
-    protected static function booted(): void
-    {
-        static::saved(fn () => Cache::forget('meetme.event'));
-        static::deleted(fn () => Cache::forget('meetme.event'));
-    }
-
     public static function current(): self
     {
-        return Cache::rememberForever('meetme.event', fn (): self => static::query()->firstOrCreate([], [
+        return static::query()->firstOrCreate([], [
             'name' => config('meetme.conference_name'),
             'starts_at' => config('meetme.starts_at'),
             'ends_at' => config('meetme.ends_at'),
-        ]));
+        ]);
     }
 }
