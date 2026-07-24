@@ -4,6 +4,7 @@ use App\Actions\AwardAchievements;
 use App\Enums\Achievement;
 use App\Enums\MeetingStatus;
 use App\Events\AchievementUnlocked;
+use App\Models\Event as EventModel;
 use App\Models\Meeting;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
@@ -64,6 +65,52 @@ it('broadcasts only newly unlocked achievements', function () {
 
     award($user); // already earned — nothing new
     Event::assertDispatched(AchievementUnlocked::class, 1);
+});
+
+it('awards early-tester to users who joined before the event started', function () {
+    config(['meetme.starts_at' => now()->addWeek()->toDateString()]);
+    EventModel::current(); // seed starts_at from config
+    $user = User::factory()->create();
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->toContain(Achievement::EarlyTester);
+});
+
+it('does not award early-tester without an event start date', function () {
+    $user = User::factory()->create();
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->not->toContain(Achievement::EarlyTester);
+});
+
+it('does not award early-tester to users who joined after the event started', function () {
+    config(['meetme.starts_at' => now()->subWeek()->toDateString()]);
+    EventModel::current();
+    $user = User::factory()->create();
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->not->toContain(Achievement::EarlyTester);
+});
+
+it('backfills achievements for existing users via the command', function () {
+    $user = User::factory()->create();
+    Meeting::factory()->confirmed()->create(['recipient_id' => $user->id]);
+
+    $this->artisan('meetme:backfill-achievements')->assertSuccessful();
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->toContain(Achievement::FirstConnection);
+});
+
+it('grants an achievement outright and is idempotent', function () {
+    $user = User::factory()->create();
+    $action = app(AwardAchievements::class);
+
+    expect($action->grant($user, Achievement::EarlyTester))->toBeTrue()
+        ->and($action->grant($user, Achievement::EarlyTester))->toBeFalse()
+        ->and($user->achievements()->where('achievement', Achievement::EarlyTester)->count())->toBe(1);
 });
 
 it('awards both participants when a meeting is confirmed', function () {
