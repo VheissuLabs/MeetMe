@@ -27,6 +27,26 @@ class GetLeaderboard
             ->all();
     }
 
+    /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, average: float, rating_count: int}> */
+    public function conversationalists(): array
+    {
+        return DB::query()
+            ->fromSub($this->answerRatings(), 'ratings')
+            ->join('users', 'users.id', '=', 'ratings.user_id')
+            ->orderByDesc('ratings.average')
+            ->orderByDesc('ratings.rating_count')
+            ->orderBy('users.name')
+            ->get(['users.name', 'users.pronouns', 'users.avatar_url', 'ratings.average', 'ratings.rating_count'])
+            ->map(fn (object $row): array => [
+                'name' => (string) $row->name,
+                'pronouns' => $row->pronouns === null ? null : (string) $row->pronouns,
+                'avatar_url' => $row->avatar_url === null ? null : (string) $row->avatar_url,
+                'average' => round((float) $row->average, 1),
+                'rating_count' => (int) $row->rating_count,
+            ])
+            ->all();
+    }
+
     /** @return array<int, int> */
     public function positions(): array
     {
@@ -55,5 +75,18 @@ class GetLeaderboard
             ->fromSub($participations, 'participations')
             ->select('user_id', DB::raw('count(*) as score'), DB::raw('max(resolved_at) as last_confirmed_at'))
             ->groupBy('user_id');
+    }
+
+    private function answerRatings(): Builder
+    {
+        return DB::table('meetings')
+            ->where('status', MeetingStatus::Confirmed->value)
+            ->whereNotNull('rating')
+            ->select(
+                'initiator_id as user_id',
+                DB::raw('avg(rating) as average'),
+                DB::raw('count(*) as rating_count'),
+            )
+            ->groupBy('initiator_id');
     }
 }

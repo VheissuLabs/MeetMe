@@ -89,7 +89,7 @@ it('shares achievements with their earned flags', function () {
     $this->actingAs($user)
         ->get(route('dashboard'))
         ->assertInertia(fn (AssertableInertia $page) => $page
-            ->has('achievements', 5)
+            ->has('achievements', 6)
             ->where('achievements.0.key', Achievement::FirstConnection->value)
             ->where('achievements.0.earned', true)
             ->where('achievements.2.earned', false));
