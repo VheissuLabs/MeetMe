@@ -42,6 +42,13 @@ it('cannot create users from the panel', function () {
     expect(UserResource::canCreate())->toBeFalse();
 });
 
+it('shows the attendee count as a navigation badge', function () {
+    User::factory()->count(2)->create();
+
+    // The acting admin from beforeEach plus the two created here.
+    expect(UserResource::getNavigationBadge())->toBe((string) User::count());
+});
+
 it('lists meetings and filters by status', function () {
     $confirmed = Meeting::factory()->confirmed()->create();
     $pending = Meeting::factory()->create();
