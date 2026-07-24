@@ -48,10 +48,14 @@ class ManageEvent extends Page implements HasSchemas
                             ->maxLength(255),
                         DateTimePicker::make('starts_at')
                             ->label('Starts at')
-                            ->seconds(false),
+                            ->native(false)
+                            ->seconds(false)
+                            ->displayFormat('M j, Y g:i A'),
                         DateTimePicker::make('ends_at')
                             ->label('Ends at')
+                            ->native(false)
                             ->seconds(false)
+                            ->displayFormat('M j, Y g:i A')
                             ->after('starts_at'),
                     ]),
             ])

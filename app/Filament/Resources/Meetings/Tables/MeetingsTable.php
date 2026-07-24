@@ -33,13 +33,13 @@ class MeetingsTable
                     ->formatStateUsing(fn (?int $state): string => $state === null ? '—' : str_repeat('★', $state))
                     ->placeholder('—'),
                 TextColumn::make('resolved_at')
-                    ->dateTime()
+                    ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->placeholder('—')
                     ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Scanned at')
-                    ->dateTime()
+                    ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->toggleable(),
             ])
