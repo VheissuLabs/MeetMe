@@ -14,6 +14,7 @@ class ResolveAvatarUrl
         return match ($source) {
             AvatarSource::Github => $this->github($user),
             AvatarSource::X => $this->x($user),
+            AvatarSource::Bluesky => $this->bluesky($user),
             AvatarSource::Gravatar => $this->gravatar($user),
         };
     }
@@ -39,9 +40,18 @@ class ResolveAvatarUrl
         return filled($user->x_username) ? $this->unavatar('x/'.$user->x_username, $this->gravatar($user)) : null;
     }
 
-    private function gravatar(User $user): string
+    private function bluesky(User $user): ?string
     {
-        return $this->unavatar('gravatar/'.hash('sha256', strtolower(trim($user->email))));
+        return filled($user->bluesky_handle)
+            ? $this->unavatar('bluesky/'.$user->bluesky_handle, $this->gravatar($user))
+            : null;
+    }
+
+    private function gravatar(User $user): ?string
+    {
+        return filled($user->email)
+            ? $this->unavatar('gravatar/'.hash('sha256', strtolower(trim($user->email))))
+            : null;
     }
 
     private function unavatar(string $path, ?string $fallback = null): string

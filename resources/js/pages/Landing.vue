@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Head, Link } from '@inertiajs/vue3'
-    import { GithubIcon, XIcon } from '@/components/icons'
+    import { BlueskyIcon, GithubIcon, XIcon } from '@/components/icons'
     import { Button } from '@/components/ui/button'
     import { leaderboard, register } from '@/routes'
     import { redirect as socialRedirect } from '@/routes/social'
@@ -55,6 +55,12 @@
                         <a :href="socialRedirect.url('x')">
                             <XIcon class="size-4" />
                             Sign in with X
+                        </a>
+                    </Button>
+                    <Button as-child size="lg" variant="outline">
+                        <a :href="socialRedirect.url('bluesky')">
+                            <BlueskyIcon class="size-4" />
+                            Sign in with Bluesky
                         </a>
                     </Button>
                     <Button as-child size="lg" variant="outline">

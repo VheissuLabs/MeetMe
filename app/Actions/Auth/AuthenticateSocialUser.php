@@ -28,14 +28,13 @@ class AuthenticateSocialUser
                 return $account->user;
             }
 
-            $user = User::query()->firstWhere('email', $socialUser->getEmail())
-                ?? User::create([
-                    'name' => $socialUser->getName() ?? $socialUser->getNickname(),
-                    'email' => $socialUser->getEmail(),
-                    'email_verified_at' => now(),
-                    'avatar_url' => $socialUser->getAvatar(),
-                    'avatar_source' => $this->avatarSourceFor($provider),
-                ]);
+            $user = $this->linkByEmail($socialUser) ?? User::create([
+                'name' => $socialUser->getName() ?? $socialUser->getNickname(),
+                'email' => $socialUser->getEmail(),
+                'email_verified_at' => $socialUser->getEmail() === null ? null : now(),
+                'avatar_url' => $socialUser->getAvatar(),
+                'avatar_source' => $this->avatarSourceFor($provider),
+            ]);
 
             $user->socialAccounts()->create([
                 'provider' => $provider,
@@ -44,12 +43,32 @@ class AuthenticateSocialUser
                 'avatar_url' => $socialUser->getAvatar(),
             ]);
 
-            if ($provider === SocialProvider::X && blank($user->x_username)) {
-                $user->update(['x_username' => $socialUser->getNickname()]);
-            }
+            $this->backfillHandle($provider, $user, $socialUser);
 
             return $user;
         });
+    }
+
+    private function linkByEmail(SocialiteUser $socialUser): ?User
+    {
+        // Bluesky and other providers may not share an email; only match by
+        // email when the provider actually gave us one.
+        return $socialUser->getEmail() === null
+            ? null
+            : User::query()->firstWhere('email', $socialUser->getEmail());
+    }
+
+    private function backfillHandle(SocialProvider $provider, User $user, SocialiteUser $socialUser): void
+    {
+        match ($provider) {
+            SocialProvider::X => blank($user->x_username)
+                ? $user->update(['x_username' => $socialUser->getNickname()])
+                : null,
+            SocialProvider::Bluesky => blank($user->bluesky_handle)
+                ? $user->update(['bluesky_handle' => $socialUser->getNickname()])
+                : null,
+            default => null,
+        };
     }
 
     private function avatarSourceFor(SocialProvider $provider): AvatarSource
@@ -57,6 +76,7 @@ class AuthenticateSocialUser
         return match ($provider) {
             SocialProvider::Github => AvatarSource::Github,
             SocialProvider::X => AvatarSource::X,
+            SocialProvider::Bluesky => AvatarSource::Bluesky,
         };
     }
 }

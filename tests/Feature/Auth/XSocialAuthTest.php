@@ -81,12 +81,11 @@ test('an x account can coexist with a github account on one user', function () {
     expect($user->socialAccounts()->count())->toBe(2);
 });
 
-test('an x account without an email cannot sign in', function () {
+test('an x account without an email creates an emailless user', function () {
     Socialite::fake('x', fakeXUser(['email' => null]));
 
-    $response = $this->get(route('social.callback', 'x'));
+    $this->get(route('social.callback', 'x'))->assertRedirect(route('dashboard', absolute: false));
 
-    $response->assertRedirect(route('login', absolute: false));
-    $this->assertGuest();
-    expect(User::query()->count())->toBe(0);
+    $this->assertAuthenticated();
+    expect(User::query()->sole()->email)->toBeNull();
 });

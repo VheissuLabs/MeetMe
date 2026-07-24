@@ -22,12 +22,6 @@ class SocialCallbackController extends Controller
                 ->with('error', __('We could not sign you in. Please try again.'));
         }
 
-        if (blank($socialUser->getEmail())) {
-            return redirect()
-                ->route('login')
-                ->with('error', __('Your account has no public email address. Please register with email first.'));
-        }
-
         Auth::login($authenticate->handle($provider, $socialUser), remember: true);
 
         return redirect()->intended(route('dashboard'));
