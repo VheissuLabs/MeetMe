@@ -40,10 +40,20 @@ it('returns the same singleton event on repeat calls', function () {
         ->and(Event::query()->count())->toBe(1);
 });
 
-it('busts the cache when the event changes', function () {
+it('reflects updates on the next read', function () {
     Event::current()->update(['name' => 'Renamed Conf']);
 
     expect(Event::current()->name)->toBe('Renamed Conf');
+});
+
+it('always returns a real Event model even after the cache store is used', function () {
+    // Regression: caching the model serialized it, and the database cache
+    // returned an __PHP_Incomplete_Class on later reads.
+    Event::current();
+    cache()->put('unrelated', 'value');
+
+    expect(Event::current())->toBeInstanceOf(Event::class)
+        ->and(Event::current()->exists)->toBeTrue();
 });
 
 it('reads the conference name from the event on the landing and leaderboard', function () {
