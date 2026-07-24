@@ -14,6 +14,11 @@ enum Achievement: string
     case Curious = 'curious';
     case EarlyTester = 'early-tester';
     case AllWiredUp = 'all-wired-up';
+    case Popular = 'popular';
+    case NightOwl = 'night-owl';
+    case EarlyBird = 'early-bird';
+    case Prolific = 'prolific';
+    case Completionist = 'completionist';
 
     public function label(): string
     {
@@ -28,6 +33,11 @@ enum Achievement: string
             self::Curious => 'Curious',
             self::EarlyTester => 'Early Tester',
             self::AllWiredUp => 'All Wired Up',
+            self::Popular => 'Popular',
+            self::NightOwl => 'Night Owl',
+            self::EarlyBird => 'Early Bird',
+            self::Prolific => 'Prolific',
+            self::Completionist => 'Completionist',
         };
     }
 
@@ -44,6 +54,11 @@ enum Achievement: string
             self::Curious => 'Scanned 10 people to break the ice.',
             self::EarlyTester => 'Joined before the event began — thanks for helping test!',
             self::AllWiredUp => 'Linked GitHub, X, Bluesky, and LinkedIn.',
+            self::Popular => 'Got scanned by 10 different people.',
+            self::NightOwl => 'Confirmed a meeting after 9pm.',
+            self::EarlyBird => 'Confirmed a meeting before 9am.',
+            self::Prolific => 'Answered 25 icebreakers.',
+            self::Completionist => 'Earned every other badge.',
         };
     }
 
@@ -60,6 +75,11 @@ enum Achievement: string
             self::Curious => '🔍',
             self::EarlyTester => '🧪',
             self::AllWiredUp => '🔗',
+            self::Popular => '🧲',
+            self::NightOwl => '🦉',
+            self::EarlyBird => '🐦',
+            self::Prolific => '📚',
+            self::Completionist => '🎖️',
         };
     }
 }

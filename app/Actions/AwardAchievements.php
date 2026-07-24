@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Meeting;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class AwardAchievements
 {
@@ -63,7 +64,31 @@ class AwardAchievements
                 && filled($user->x_username)
                 && filled($user->bluesky_handle)
                 && filled($user->linkedin_username),
+            Achievement::Popular => $this->timesScanned($user) >= 10,
+            Achievement::Prolific => $this->timesScanned($user) >= 25,
+            Achievement::NightOwl => $this->confirmedHours($user)->contains(fn (int $hour): bool => $hour >= 21),
+            Achievement::EarlyBird => $this->confirmedHours($user)->contains(fn (int $hour): bool => $hour < 9),
+            // Evaluated last (enum order), after any others earned this run.
+            Achievement::Completionist => $user->achievements()
+                ->where('achievement', '!=', Achievement::Completionist->value)
+                ->count() >= count(Achievement::cases()) - 1,
         };
+    }
+
+    private function timesScanned(User $user): int
+    {
+        return Meeting::query()->confirmed()->where('recipient_id', $user->id)->count();
+    }
+
+    /** @return Collection<int, int> */
+    private function confirmedHours(User $user): Collection
+    {
+        return Meeting::query()
+            ->confirmed()
+            ->involving($user)
+            ->whereNotNull('resolved_at')
+            ->get(['resolved_at'])
+            ->map(fn (Meeting $meeting): int => $meeting->resolved_at->timezone(config('app.timezone'))->hour);
     }
 
     /** @return Builder<Meeting> */
