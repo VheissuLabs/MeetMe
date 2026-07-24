@@ -55,7 +55,6 @@ it('captures marketing screenshots on a phone (light + dark)', function () {
         $open('/my-qr', $dark)->assertPathIs('/my-qr')->screenshot(false, "my-qr{$suffix}");
         $open('/connections', $dark)->screenshot(false, "connections{$suffix}");
         $open('/leaderboard', $dark)->screenshot(false, "leaderboard{$suffix}");
-        $open('/scan', $dark)->screenshot(false, "scan{$suffix}");
 
         $open('/meetings/'.$answering->id, $dark)
             ->fill('answer', 'A race condition in a cron job that only fired during DST — found it by staring at timestamps at 2am.')

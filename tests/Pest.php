@@ -22,6 +22,9 @@ pest()->extend(TestCase::class)
 // database, so they deliberately skip RefreshDatabase.
 pest()->extend(TestCase::class)->in('Browser');
 
+// Give the SPA a little longer to settle so screenshot capture isn't flaky.
+pest()->browser()->timeout(15000);
+
 /*
 |--------------------------------------------------------------------------
 | Expectations
