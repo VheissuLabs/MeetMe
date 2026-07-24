@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Head, Link } from '@inertiajs/vue3'
-    import { GithubIcon } from '@/components/icons'
+    import { GithubIcon, XIcon } from '@/components/icons'
     import { Button } from '@/components/ui/button'
     import { leaderboard, register } from '@/routes'
     import { redirect as socialRedirect } from '@/routes/social'
@@ -24,7 +24,7 @@
     <Head :title="`MeetMe — ${props.conferenceName}`" />
 
     <div class="min-h-screen bg-background text-foreground">
-        <header class="mx-auto flex max-w-3xl items-center justify-between px-6 py-6">
+        <header class="mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
             <span class="text-lg font-bold tracking-tight">MeetMe</span>
             <Link
                 :href="leaderboard()"
@@ -34,7 +34,7 @@
             </Link>
         </header>
 
-        <main class="mx-auto flex max-w-3xl flex-col gap-16 px-6 pb-16 sm:pb-24">
+        <main class="mx-auto flex max-w-5xl flex-col gap-16 px-6 pb-16 sm:pb-24">
             <!-- Hero -->
             <section class="flex flex-col items-center gap-6 text-center">
                 <h1 class="text-4xl font-bold tracking-tight text-balance sm:text-6xl">
@@ -49,6 +49,12 @@
                         <a :href="socialRedirect.url('github')">
                             <GithubIcon class="size-4" />
                             Sign in with GitHub
+                        </a>
+                    </Button>
+                    <Button as-child size="lg" variant="outline">
+                        <a :href="socialRedirect.url('x')">
+                            <XIcon class="size-4" />
+                            Sign in with X
                         </a>
                     </Button>
                     <Button as-child size="lg" variant="outline">
