@@ -115,6 +115,7 @@ test('meetme profile fields can be updated', function () {
             'pronouns' => 'she/her',
             'x_username' => 'karlbuilds',
             'bluesky_handle' => 'karl.dev',
+            'linkedin_username' => 'karl-murray',
             'email_visible' => '1',
         ]);
 
@@ -125,6 +126,7 @@ test('meetme profile fields can be updated', function () {
     expect($user->pronouns)->toBe('she/her')
         ->and($user->x_username)->toBe('karlbuilds')
         ->and($user->bluesky_handle)->toBe('karl.dev')
+        ->and($user->linkedin_username)->toBe('karl-murray')
         ->and($user->email_visible)->toBeTrue();
 });
 
@@ -136,12 +138,14 @@ test('handles are normalized before saving', function () {
         'email' => $user->email,
         'x_username' => '@karlbuilds',
         'bluesky_handle' => '@Karl.BSKY.social',
+        'linkedin_username' => 'https://www.linkedin.com/in/karl-murray/',
     ])->assertSessionHasNoErrors();
 
     $user->refresh();
 
     expect($user->x_username)->toBe('karlbuilds')
-        ->and($user->bluesky_handle)->toBe('karl.bsky.social');
+        ->and($user->bluesky_handle)->toBe('karl.bsky.social')
+        ->and($user->linkedin_username)->toBe('karl-murray');
 });
 
 test('unchecking email visibility turns it off', function () {
@@ -171,6 +175,8 @@ test('invalid meetme profile fields are rejected', function (array $input, strin
     'x username with spaces' => [['x_username' => 'not a handle'], 'x_username'],
     'x username too long' => [['x_username' => str_repeat('a', 16)], 'x_username'],
     'bluesky without a domain' => [['bluesky_handle' => 'not-a-domain'], 'bluesky_handle'],
+    'linkedin too short' => [['linkedin_username' => 'ab'], 'linkedin_username'],
+    'linkedin with spaces' => [['linkedin_username' => 'not a slug'], 'linkedin_username'],
 ]);
 
 test('the profile form supports precognitive validation', function () {
