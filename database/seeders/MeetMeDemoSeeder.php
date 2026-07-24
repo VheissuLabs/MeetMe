@@ -39,6 +39,7 @@ class MeetMeDemoSeeder extends Seeder
             'bluesky_handle' => 'demo.bsky.social',
             'pronouns' => 'they/them',
             'email_visible' => true,
+            'is_admin' => true,
         ]);
 
         $others = User::factory()

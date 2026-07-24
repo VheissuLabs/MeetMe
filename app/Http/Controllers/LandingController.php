@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,7 +17,7 @@ class LandingController extends Controller
         }
 
         return Inertia::render('Landing', [
-            'conferenceName' => config('meetme.conference_name'),
+            'conferenceName' => Event::current()->name,
         ]);
     }
 }
