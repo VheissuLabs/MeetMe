@@ -64,20 +64,14 @@
 
     <div class="mx-auto flex w-full max-w-2xl flex-col gap-6 p-4">
         <!-- Identity card -->
-        <Card>
-            <CardContent class="flex flex-col items-center gap-3 p-6 text-center">
-                <div v-if="isSelf" class="flex w-full justify-end">
-                    <Button as-child variant="outline" size="sm">
-                        <Link :href="profileEdit()"><Pencil class="size-3.5" /> Edit profile</Link>
-                    </Button>
-                </div>
-
-                <Avatar class="size-24">
+        <div class="flex flex-col gap-4">
+            <div class="flex items-start gap-4">
+                <Avatar class="size-20 shrink-0">
                     <AvatarImage v-if="profile.avatar_url" :src="profile.avatar_url" :alt="profile.name" />
                     <AvatarFallback class="text-2xl">{{ getInitials(profile.name) }}</AvatarFallback>
                 </Avatar>
 
-                <div>
+                <div class="min-w-0 flex-1">
                     <h1 class="text-2xl font-bold">
                         {{ profile.name }}
                         <span v-if="profile.pronouns" class="text-base font-normal text-muted-foreground">
@@ -87,56 +81,60 @@
                     <p v-if="roleLine" class="text-sm text-muted-foreground">{{ roleLine }}</p>
                 </div>
 
-                <p v-if="profile.headline" class="max-w-md text-pretty">{{ profile.headline }}</p>
+                <Button v-if="isSelf" as-child variant="outline" size="sm" class="shrink-0">
+                    <Link :href="profileEdit()"><Pencil class="size-3.5" /> Edit</Link>
+                </Button>
+            </div>
 
-                <div class="flex items-center gap-4">
-                    <a
-                        v-for="social in socialLinks"
-                        v-show="profile.socials[social.key]"
-                        :key="social.key"
-                        :href="profile.socials[social.key]"
-                        target="_blank"
-                        rel="noopener"
-                        :aria-label="social.label"
-                    >
-                        <component
-                            :is="social.icon"
-                            class="size-5 text-muted-foreground transition-colors hover:text-foreground"
-                        />
-                    </a>
-                    <a v-if="profile.email" :href="`mailto:${profile.email}`" aria-label="Email">
-                        <Mail class="size-5 text-muted-foreground transition-colors hover:text-foreground" />
-                    </a>
+            <p v-if="profile.headline" class="text-pretty">{{ profile.headline }}</p>
+
+            <div class="flex items-center gap-4">
+                <a
+                    v-for="social in socialLinks"
+                    v-show="profile.socials[social.key]"
+                    :key="social.key"
+                    :href="profile.socials[social.key]"
+                    target="_blank"
+                    rel="noopener"
+                    :aria-label="social.label"
+                >
+                    <component
+                        :is="social.icon"
+                        class="size-5 text-muted-foreground transition-colors hover:text-foreground"
+                    />
+                </a>
+                <a v-if="profile.email" :href="`mailto:${profile.email}`" aria-label="Email">
+                    <Mail class="size-5 text-muted-foreground transition-colors hover:text-foreground" />
+                </a>
+            </div>
+
+            <TooltipProvider v-if="achievements.length" :delay-duration="0">
+                <div class="flex flex-wrap gap-2">
+                    <Tooltip v-for="achievement in achievements" :key="achievement.key">
+                        <TooltipTrigger as-child>
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
+                                :data-test="`achievement-${achievement.key}`"
+                            >
+                                <span>{{ achievement.icon }}</span>
+                                <span>{{ achievement.name }}</span>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{{ achievement.description }}</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
+            </TooltipProvider>
 
-                <TooltipProvider v-if="achievements.length" :delay-duration="0">
-                    <div class="flex flex-wrap justify-center gap-2">
-                        <Tooltip v-for="achievement in achievements" :key="achievement.key">
-                            <TooltipTrigger as-child>
-                                <span
-                                    class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
-                                    :data-test="`achievement-${achievement.key}`"
-                                >
-                                    <span>{{ achievement.icon }}</span>
-                                    <span>{{ achievement.name }}</span>
-                                </span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>{{ achievement.description }}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
-                </TooltipProvider>
-
-                <p class="text-sm text-muted-foreground">
-                    <span class="font-semibold text-foreground">{{ stats.connections }}</span>
-                    {{ stats.connections === 1 ? 'connection' : 'connections' }}
-                    <template v-if="stats.averageRating !== null">
-                        · <span class="text-yellow-400">★</span> {{ stats.averageRating }} avg
-                    </template>
-                </p>
-            </CardContent>
-        </Card>
+            <p class="text-sm text-muted-foreground">
+                <span class="font-semibold text-foreground">{{ stats.connections }}</span>
+                {{ stats.connections === 1 ? 'connection' : 'connections' }}
+                <template v-if="stats.averageRating !== null">
+                    · <span class="text-yellow-400">★</span> {{ stats.averageRating }} avg
+                </template>
+            </p>
+        </div>
 
         <!-- Icebreaker feed -->
         <div class="flex flex-col gap-3">
