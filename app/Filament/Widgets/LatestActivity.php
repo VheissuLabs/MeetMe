@@ -14,7 +14,8 @@ class LatestActivity extends TableWidget
 {
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?int $sort = -1;
+    // Render below the stats overview (sort -1) on the dashboard.
+    protected static ?int $sort = 2;
 
     #[On('echo:admin-activity,ActivityLogged')]
     public function refresh(): void {}
