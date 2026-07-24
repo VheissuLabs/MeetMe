@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -33,6 +34,12 @@ class IcebreakerQuestion extends Model
         'created_at',
         'updated_at',
     ];
+
+    /** @return HasMany<Meeting, $this> */
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
 
     /** @param array<int, string> $ids */
     public static function randomExcluding(array $ids = []): ?self
