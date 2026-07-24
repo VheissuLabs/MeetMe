@@ -130,6 +130,37 @@ test('meetme profile fields can be updated', function () {
         ->and($user->email_visible)->toBeTrue();
 });
 
+test('profile card fields can be updated', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+        'headline' => 'Rust-curious, coffee-powered',
+        'job_title' => 'Senior Engineer',
+        'company' => 'Acme',
+        'answers_visible' => '1',
+    ])->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->headline)->toBe('Rust-curious, coffee-powered')
+        ->and($user->job_title)->toBe('Senior Engineer')
+        ->and($user->company)->toBe('Acme')
+        ->and($user->answers_visible)->toBeTrue();
+});
+
+test('unchecking answers visibility turns it off', function () {
+    $user = User::factory()->create(['answers_visible' => true]);
+
+    $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+    ])->assertSessionHasNoErrors();
+
+    expect($user->refresh()->answers_visible)->toBeFalse();
+});
+
 test('handles are normalized before saving', function () {
     $user = User::factory()->create();
 

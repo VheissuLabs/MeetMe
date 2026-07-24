@@ -92,6 +92,69 @@ it('keeps redacted answers redacted on the profile', function () {
             ->where('profile.rating', $meeting->rating));
 });
 
+it('includes identity fields and connection stats', function () {
+    $me = User::factory()->create();
+    $them = User::factory()->create(['headline' => 'Rust curious', 'job_title' => 'Engineer', 'company' => 'Acme']);
+    Meeting::factory()->confirmed()->create(['recipient_id' => $them->id]);
+
+    $this->actingAs($me)
+        ->get(route('users.show', $them->qr_token))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->where('profile.headline', 'Rust curious')
+            ->where('profile.job_title', 'Engineer')
+            ->where('profile.company', 'Acme')
+            ->where('stats.connections', 1));
+});
+
+it('marks your own profile as yours', function () {
+    $me = User::factory()->create();
+
+    $this->actingAs($me)
+        ->get(route('users.show', $me->qr_token))
+        ->assertInertia(fn (AssertableInertia $page) => $page->where('isSelf', true));
+});
+
+it('lists the icebreakers a person was asked and answered, newest first', function () {
+    $me = User::factory()->create();
+    $them = User::factory()->create();
+    $jordan = User::factory()->create(['name' => 'Jordan']);
+
+    Meeting::factory()->confirmed()->create([
+        'initiator_id' => $jordan->id,
+        'recipient_id' => $them->id,
+        'question' => 'Tabs or spaces?',
+        'answer' => 'Spaces, obviously.',
+    ]);
+
+    $this->actingAs($me)
+        ->get(route('users.show', $them->qr_token))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->has('feed.data', 1)
+            ->where('feed.data.0.asker', 'Jordan')
+            ->where('feed.data.0.question', 'Tabs or spaces?')
+            ->where('feed.data.0.answer', 'Spaces, obviously.'));
+});
+
+it('excludes redacted answers from the feed', function () {
+    $me = User::factory()->create();
+    $them = User::factory()->create();
+    Meeting::factory()->redacted()->create(['recipient_id' => $them->id]);
+
+    $this->actingAs($me)
+        ->get(route('users.show', $them->qr_token))
+        ->assertInertia(fn (AssertableInertia $page) => $page->has('feed.data', 0));
+});
+
+it('hides the feed when the person opted out', function () {
+    $me = User::factory()->create();
+    $them = User::factory()->create(['answers_visible' => false]);
+    Meeting::factory()->confirmed()->create(['recipient_id' => $them->id]);
+
+    $this->actingAs($me)
+        ->get(route('users.show', $them->qr_token))
+        ->assertInertia(fn (AssertableInertia $page) => $page->has('feed.data', 0));
+});
+
 it('requires authentication', function () {
     $them = User::factory()->create();
 

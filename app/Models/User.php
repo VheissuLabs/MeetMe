@@ -34,7 +34,7 @@ class User extends Authenticatable implements FilamentUser, PasskeyUser
     {
         return LogOptions::defaults()
             ->useLogName('user')
-            ->logOnly(['name', 'pronouns', 'x_username', 'bluesky_handle', 'linkedin_username', 'email_visible', 'is_admin'])
+            ->logOnly(['name', 'pronouns', 'headline', 'job_title', 'company', 'x_username', 'bluesky_handle', 'linkedin_username', 'email_visible', 'answers_visible', 'is_admin'])
             ->logOnlyDirty()
             ->dontLogEmptyChanges()
             ->setDescriptionForEvent(fn (string $event): string => "User {$event}");
@@ -76,6 +76,7 @@ class User extends Authenticatable implements FilamentUser, PasskeyUser
             'is_admin' => 'boolean',
             'avatar_source' => AvatarSource::class,
             'email_visible' => 'boolean',
+            'answers_visible' => 'boolean',
         ];
     }
 

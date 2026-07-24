@@ -1,6 +1,7 @@
 <script setup lang="ts">
-    import { Link } from '@inertiajs/vue3'
-    import { FolderGit2, LayoutGrid, ScanLine, Trophy, Users } from '@lucide/vue'
+    import { Link, usePage } from '@inertiajs/vue3'
+    import { FolderGit2, IdCard, LayoutGrid, ScanLine, Trophy, Users } from '@lucide/vue'
+    import { computed } from 'vue'
     import AppLogo from '@/components/AppLogo.vue'
     import NavFooter from '@/components/NavFooter.vue'
     import NavMain from '@/components/NavMain.vue'
@@ -15,13 +16,21 @@
         SidebarMenuItem,
     } from '@/components/ui/sidebar'
     import { dashboard } from '@/routes'
+    import { show as userProfile } from '@/routes/users'
     import type { NavItem } from '@/types'
 
-    const mainNavItems: NavItem[] = [
+    const page = usePage()
+
+    const mainNavItems = computed<NavItem[]>(() => [
         {
             title: 'My QR',
             href: dashboard(),
             icon: LayoutGrid,
+        },
+        {
+            title: 'My Profile',
+            href: userProfile(page.props.auth.user.qr_token),
+            icon: IdCard,
         },
         {
             title: 'Scan',
@@ -38,7 +47,7 @@
             href: '/leaderboard',
             icon: Trophy,
         },
-    ]
+    ])
 
     const footerNavItems: NavItem[] = [
         {

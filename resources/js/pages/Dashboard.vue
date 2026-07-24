@@ -7,6 +7,7 @@
     import { Card, CardContent } from '@/components/ui/card'
     import { connections, dashboard, leaderboard } from '@/routes'
     import { edit as profileEdit } from '@/routes/profile'
+    import { show as userProfile } from '@/routes/users'
 
     type Achievement = {
         key: string
@@ -31,6 +32,7 @@
 
     const page = usePage()
     const score = computed(() => page.props.score)
+    const myQrToken = computed(() => page.props.auth.user.qr_token)
 </script>
 
 <template>
@@ -54,9 +56,14 @@
                     <p class="text-4xl font-bold" data-test="score">{{ score }}</p>
                     <p class="text-sm text-muted-foreground">{{ score === 1 ? 'connection' : 'connections' }}</p>
                 </Link>
-                <Button as-child variant="outline" size="sm">
-                    <Link :href="leaderboard()" prefetch>View leaderboard</Link>
-                </Button>
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                    <Button as-child variant="outline" size="sm">
+                        <Link :href="userProfile(myQrToken)" prefetch>View my profile</Link>
+                    </Button>
+                    <Button as-child variant="outline" size="sm">
+                        <Link :href="leaderboard()" prefetch>View leaderboard</Link>
+                    </Button>
+                </div>
             </CardContent>
         </Card>
 
