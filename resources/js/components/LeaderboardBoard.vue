@@ -2,9 +2,19 @@
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { useInitials } from '@/composables/useInitials'
 
+    type Row = {
+        name: string
+        pronouns: string | null
+        avatar_url: string | null
+        value: string | number
+        meta?: string | null
+    }
+
     defineProps<{
-        conferenceName: string
-        rankings: Array<{ name: string; pronouns: string | null; avatar_url: string | null; score: number }>
+        heading: string
+        tagline: string
+        emptyMessage: string
+        rankings: Row[]
     }>()
 
     const { getInitials } = useInitials()
@@ -13,14 +23,14 @@
 </script>
 
 <template>
-    <div class="mx-auto flex w-full max-w-3xl flex-col gap-8">
+    <section class="flex flex-col gap-4">
         <header class="text-center">
-            <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{{ conferenceName }} Leaderboard</h1>
-            <p class="mt-2 text-lg text-muted-foreground">Most connections wins. Scan someone to climb.</p>
+            <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">{{ heading }}</h2>
+            <p class="mt-1 text-muted-foreground">{{ tagline }}</p>
         </header>
 
         <p v-if="rankings.length === 0" class="text-center text-xl text-muted-foreground" data-test="leaderboard-empty">
-            No confirmed meetings yet — be the first on the board!
+            {{ emptyMessage }}
         </p>
 
         <ol v-else class="flex flex-col gap-2">
@@ -42,8 +52,11 @@
                     <p class="truncate text-xl font-semibold">{{ row.name }}</p>
                     <p v-if="row.pronouns" class="truncate text-sm text-muted-foreground">{{ row.pronouns }}</p>
                 </div>
-                <span class="shrink-0 text-3xl font-bold tabular-nums">{{ row.score }}</span>
+                <div class="shrink-0 text-right">
+                    <span class="text-3xl font-bold tabular-nums">{{ row.value }}</span>
+                    <p v-if="row.meta" class="text-xs text-muted-foreground">{{ row.meta }}</p>
+                </div>
             </li>
         </ol>
-    </div>
+    </section>
 </template>
