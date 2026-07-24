@@ -10,6 +10,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -41,6 +42,17 @@ class User extends Authenticatable implements FilamentUser, PasskeyUser
         'two_factor_recovery_codes',
         'remember_token',
     ];
+
+    /** @var list<string> */
+    protected $appends = [
+        'has_password',
+    ];
+
+    /** @return Attribute<bool, never> */
+    protected function hasPassword(): Attribute
+    {
+        return Attribute::get(fn (): bool => $this->password !== null);
+    }
 
     /** @return array<string, string> */
     protected function casts(): array
