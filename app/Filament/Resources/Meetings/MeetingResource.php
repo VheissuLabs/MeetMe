@@ -21,6 +21,21 @@ class MeetingResource extends Resource
         return false;
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Meeting::query()->confirmed()->count();
+    }
+
+    public static function getNavigationBadgeColor(): string
+    {
+        return 'success';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Confirmed connections';
+    }
+
     public static function table(Table $table): Table
     {
         return MeetingsTable::configure($table);
