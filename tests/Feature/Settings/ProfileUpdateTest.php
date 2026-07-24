@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Achievement;
 use App\Models\User;
 
 test('profile page is displayed', function () {
@@ -128,6 +129,20 @@ test('meetme profile fields can be updated', function () {
         ->and($user->bluesky_handle)->toBe('karl.dev')
         ->and($user->linkedin_username)->toBe('karl-murray')
         ->and($user->email_visible)->toBeTrue();
+});
+
+test('completing every social unlocks the all-wired-up badge on save', function () {
+    $user = User::factory()->withGithub()->create();
+
+    $this->actingAs($user)->patch(route('profile.update'), [
+        'name' => $user->name,
+        'email' => $user->email,
+        'x_username' => 'karl',
+        'bluesky_handle' => 'karl.bsky.social',
+        'linkedin_username' => 'karl-murray',
+    ])->assertSessionHasNoErrors();
+
+    expect($user->refresh()->achievements()->where('achievement', Achievement::AllWiredUp)->exists())->toBeTrue();
 });
 
 test('profile card fields can be updated', function () {

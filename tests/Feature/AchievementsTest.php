@@ -113,6 +113,57 @@ it('grants an achievement outright and is idempotent', function () {
         ->and($user->achievements()->where('achievement', Achievement::EarlyTester)->count())->toBe(1);
 });
 
+it('awards curious after scanning ten people', function () {
+    $user = User::factory()->create();
+    Meeting::factory()->confirmed()->count(10)->create(['initiator_id' => $user->id]);
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->toContain(Achievement::Curious);
+});
+
+it('awards crowd-pleaser for a high average across enough ratings', function () {
+    $user = User::factory()->create();
+    Meeting::factory()->confirmed()->count(5)->create(['initiator_id' => $user->id, 'rating' => 5]);
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->toContain(Achievement::CrowdPleaser);
+});
+
+it('does not award crowd-pleaser without enough ratings', function () {
+    $user = User::factory()->create();
+    Meeting::factory()->confirmed()->count(3)->create(['initiator_id' => $user->id, 'rating' => 5]);
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->not->toContain(Achievement::CrowdPleaser);
+});
+
+it('awards all-wired-up when every social is linked', function () {
+    $user = User::factory()->withGithub()->create([
+        'x_username' => 'karl',
+        'bluesky_handle' => 'karl.bsky.social',
+        'linkedin_username' => 'karl-murray',
+    ]);
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->toContain(Achievement::AllWiredUp);
+});
+
+it('does not award all-wired-up with a social missing', function () {
+    $user = User::factory()->withGithub()->create([
+        'x_username' => 'karl',
+        'bluesky_handle' => 'karl.bsky.social',
+        'linkedin_username' => null,
+    ]);
+
+    award($user);
+
+    expect($user->achievements()->get()->pluck('achievement')->all())->not->toContain(Achievement::AllWiredUp);
+});
+
 it('awards both participants when a meeting is confirmed', function () {
     $a = User::factory()->create();
     $b = User::factory()->create();

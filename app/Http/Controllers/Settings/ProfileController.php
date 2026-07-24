@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Actions\AwardAchievements;
 use App\Actions\ResolveAvatarUrl;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
@@ -24,7 +25,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request, AwardAchievements $awardAchievements): RedirectResponse
     {
         $request->user()->fill($request->validated());
 
@@ -33,6 +34,9 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        // Completing your profile can unlock badges (e.g. All Wired Up).
+        $awardAchievements->for($request->user());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
 

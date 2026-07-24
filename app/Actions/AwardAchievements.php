@@ -7,6 +7,7 @@ use App\Events\AchievementUnlocked;
 use App\Models\Event;
 use App\Models\Meeting;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class AwardAchievements
 {
@@ -44,13 +45,33 @@ class AwardAchievements
             Achievement::GettingStarted => $score >= 3,
             Achievement::SocialButterfly => $score >= 10,
             Achievement::SuperConnector => $score >= 25,
+            Achievement::Legend => $score >= 50,
             Achievement::FiveStar => Meeting::query()
                 ->confirmed()
                 ->where('initiator_id', $user->id)
                 ->where('rating', 5)
                 ->exists(),
+            Achievement::CrowdPleaser => $this->ratedAnswers($user)->count() >= 5
+                && (float) $this->ratedAnswers($user)->avg('rating') >= 4.5,
+            Achievement::Curious => Meeting::query()
+                ->confirmed()
+                ->where('initiator_id', $user->id)
+                ->count() >= 10,
             Achievement::EarlyTester => ($startsAt = Event::current()->starts_at) !== null
                 && $user->created_at->lessThan($startsAt),
+            Achievement::AllWiredUp => $user->githubAccount()->exists()
+                && filled($user->x_username)
+                && filled($user->bluesky_handle)
+                && filled($user->linkedin_username),
         };
+    }
+
+    /** @return Builder<Meeting> */
+    private function ratedAnswers(User $user): Builder
+    {
+        return Meeting::query()
+            ->confirmed()
+            ->where('initiator_id', $user->id)
+            ->whereNotNull('rating');
     }
 }
