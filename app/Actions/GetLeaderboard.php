@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class GetLeaderboard
 {
-    /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, score: int}> */
+    /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, qr_token: string, score: int}> */
     public function get(): array
     {
         return DB::query()
@@ -17,17 +17,18 @@ class GetLeaderboard
             ->orderByDesc('scores.score')
             ->orderBy('scores.last_confirmed_at')
             ->orderBy('users.name')
-            ->get(['users.name', 'users.pronouns', 'users.avatar_url', 'scores.score'])
+            ->get(['users.name', 'users.pronouns', 'users.avatar_url', 'users.qr_token', 'scores.score'])
             ->map(fn (object $row): array => [
                 'name' => (string) $row->name,
                 'pronouns' => $row->pronouns === null ? null : (string) $row->pronouns,
                 'avatar_url' => $row->avatar_url === null ? null : (string) $row->avatar_url,
+                'qr_token' => (string) $row->qr_token,
                 'score' => (int) $row->score,
             ])
             ->all();
     }
 
-    /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, average: float, rating_count: int}> */
+    /** @return array<int, array{name: string, pronouns: string|null, avatar_url: string|null, qr_token: string, average: float, rating_count: int}> */
     public function conversationalists(): array
     {
         return DB::query()
@@ -36,11 +37,12 @@ class GetLeaderboard
             ->orderByDesc('ratings.average')
             ->orderByDesc('ratings.rating_count')
             ->orderBy('users.name')
-            ->get(['users.name', 'users.pronouns', 'users.avatar_url', 'ratings.average', 'ratings.rating_count'])
+            ->get(['users.name', 'users.pronouns', 'users.avatar_url', 'users.qr_token', 'ratings.average', 'ratings.rating_count'])
             ->map(fn (object $row): array => [
                 'name' => (string) $row->name,
                 'pronouns' => $row->pronouns === null ? null : (string) $row->pronouns,
                 'avatar_url' => $row->avatar_url === null ? null : (string) $row->avatar_url,
+                'qr_token' => (string) $row->qr_token,
                 'average' => round((float) $row->average, 1),
                 'rating_count' => (int) $row->rating_count,
             ])

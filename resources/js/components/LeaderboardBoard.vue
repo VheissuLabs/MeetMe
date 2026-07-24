@@ -1,6 +1,8 @@
 <script setup lang="ts">
+    import { Link } from '@inertiajs/vue3'
     import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
     import { useInitials } from '@/composables/useInitials'
+    import { show as userProfile } from '@/routes/users'
 
     type Row = {
         name: string
@@ -8,6 +10,7 @@
         avatar_url: string | null
         value: string | number
         meta?: string | null
+        qr_token?: string
     }
 
     defineProps<{
@@ -49,7 +52,14 @@
                     <AvatarFallback>{{ getInitials(row.name) }}</AvatarFallback>
                 </Avatar>
                 <div class="min-w-0 flex-1">
-                    <p class="truncate text-xl font-semibold">{{ row.name }}</p>
+                    <Link
+                        v-if="row.qr_token"
+                        :href="userProfile(row.qr_token)"
+                        class="truncate text-xl font-semibold hover:underline"
+                    >
+                        {{ row.name }}
+                    </Link>
+                    <p v-else class="truncate text-xl font-semibold">{{ row.name }}</p>
                     <p v-if="row.pronouns" class="truncate text-sm text-muted-foreground">{{ row.pronouns }}</p>
                 </div>
                 <div class="shrink-0 text-right">
