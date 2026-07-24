@@ -6,6 +6,7 @@ use App\Actions\BuildConnections;
 use App\Enums\MeetingStatus;
 use App\Models\Meeting;
 use App\Models\User;
+use App\Models\UserAchievement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,6 +22,13 @@ class UserProfileController extends Controller
 
         return Inertia::render('UserProfile', [
             'profile' => $buildConnections->forMeeting($meeting, $viewer),
+            'achievements' => $user->achievements()->orderBy('earned_at')->get()
+                ->map(fn (UserAchievement $earned): array => [
+                    'key' => $earned->achievement->value,
+                    'name' => $earned->achievement->label(),
+                    'icon' => $earned->achievement->icon(),
+                ])
+                ->all(),
         ]);
     }
 }

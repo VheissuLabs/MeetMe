@@ -21,7 +21,9 @@
         rating: number | null
     }
 
-    const props = defineProps<{ profile: Profile }>()
+    type Achievement = { key: string; name: string; icon: string }
+
+    const props = defineProps<{ profile: Profile; achievements: Achievement[] }>()
 
     defineOptions({
         layout: {
@@ -75,6 +77,18 @@
                             <a v-if="profile.email" :href="`mailto:${profile.email}`" aria-label="Email">
                                 <Mail class="size-5 text-muted-foreground transition-colors hover:text-foreground" />
                             </a>
+                        </div>
+                        <div v-if="achievements.length" class="mt-3 flex flex-wrap items-center gap-2">
+                            <span
+                                v-for="achievement in achievements"
+                                :key="achievement.key"
+                                class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
+                                :title="achievement.name"
+                                :data-test="`achievement-${achievement.key}`"
+                            >
+                                <span>{{ achievement.icon }}</span>
+                                <span>{{ achievement.name }}</span>
+                            </span>
                         </div>
                     </div>
                 </div>

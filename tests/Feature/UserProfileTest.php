@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Achievement;
 use App\Models\Meeting;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
@@ -16,6 +17,20 @@ it('shows the profile of someone you have a confirmed meeting with', function ()
             ->component('UserProfile')
             ->where('profile.name', 'Ada')
             ->where('profile.socials.linkedin', 'https://www.linkedin.com/in/ada-dev'));
+});
+
+it('shows the viewed user\'s earned achievements', function () {
+    $me = User::factory()->create();
+    $them = User::factory()->create();
+    Meeting::factory()->confirmed()->create(['initiator_id' => $me->id, 'recipient_id' => $them->id]);
+    $them->achievements()->create(['achievement' => Achievement::FirstConnection, 'earned_at' => now()]);
+
+    $this->actingAs($me)
+        ->get(route('users.show', $them->qr_token))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->has('achievements', 1)
+            ->where('achievements.0.key', Achievement::FirstConnection->value)
+            ->where('achievements.0.icon', Achievement::FirstConnection->icon()));
 });
 
 it('404s for a user you have never met', function () {
